@@ -1,0 +1,240 @@
+[
+    {
+        "id": 1,
+        "approve": false,
+        "bannerImage": "https://static.vecteezy.com/system/resources/thumbnails/033/168/339/small_2x/a-young-black-man-in-a-suit-and-tie-ai-generative-free-photo.jpg",
+        "title": "Discovering My True Purpose: A Journey of Trust and Self-Discovery.",
+        "description": "When I first adopted Luna, she was skittish and avoided people, especially men. She had been through some traumatic experiences in her previous home, and it took time before she started to trust me. I, too, had my own issues with trust. Life had shown me some tough lessons, and I found it hard to believe that anyone, or anything, could remain stable.The first few weeks were challenging. Every new person who came into our lives felt like a potential threat to Luna. She would bark and hide behind me, her eyes full of fear. I understood her, though; I’d been there. My own guard was up, and I struggled to let anyone close.Then Kevin entered the picture. Kevin had an innate calmness about him. He wasn’t intimidated by Luna’s hesitancy, nor was he quick to dismiss her. He sat with her quietly, allowing her to approach him when she was ready. I watched as he earned her trust, and I realized something: I could learn from him. Kevin wasn’t just showing Luna how to trust; he was also teaching me how to trust again. Slowly, as Luna became more comfortable, I did too. Together, we learned that trust doesn’t have to be given all at once—it’s something that’s built over time, with patience, consistency, and love. Now, Luna and I are in a better place. She’s more confident, and I feel a sense of peace that I haven’t felt in years. Kevin didn’t just bring stability into our lives; he brought a new way of seeing the world and, more importantly, ourselves.",
+        "author": {
+            "image": "https://static.vecteezy.com/system/resources/thumbnails/033/168/339/small_2x/a-young-black-man-in-a-suit-and-tie-ai-generative-free-photo.jpg",
+            "name": "Hosain Ali"
+        },
+        "date": "2025-01-07",
+        "insights": {
+            "theme": "Healing and trust-building between a dog and owner",
+            "tone": "Warm, personal, and reflective",
+            "lesson": "Trust is a gradual process that requires patience and understanding from both parties."
+        }
+    },
+    {
+        "id": 2,
+        "approve": true,
+        "bannerImage": "https://media.istockphoto.com/id/1289220545/photo/beautiful-woman-smiling-with-crossed-arms.jpg?s=612x612&w=0&k=20&c=qmOTkGstKj1qN0zPVWj-n28oRA6_BHQN8uVLIXg0TF8=",
+        "title": "Mastering React: Tips & Tricks",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://media.istockphoto.com/id/1289220545/photo/beautiful-woman-smiling-with-crossed-arms.jpg?s=612x612&w=0&k=20&c=qmOTkGstKj1qN0zPVWj-n28oRA6_BHQN8uVLIXg0TF8=",
+            "name": "John Doe"
+        },
+        "date": "2025-01-05",
+        "insights": {
+            "theme": "React development and improving workflow",
+            "tone": "Technical and insightful",
+            "lesson": "Utilizing advanced React techniques can significantly improve your development efficiency and code quality."
+        }
+    },
+    {
+        "id": 3,
+        "approve": true,
+        "bannerImage": "https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=0&k=20&c=tyLvtzutRh22j9GqSGI33Z4HpIwv9vL_MZw_xOE19NQ=",
+        "title": "Understanding CSS Flexbox",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=0&k=20&c=tyLvtzutRh22j9GqSGI33Z4HpIwv9vL_MZw_xOE19NQ=",
+            "name": "Jane Smith"
+        },
+        "date": "2025-01-03",
+        "insights": {
+            "theme": "Responsive web design using CSS Flexbox",
+            "tone": "Practical and educational",
+            "lesson": "Mastering Flexbox layouts simplifies responsive web design and improves user experience."
+        }
+    },
+    {
+        "id": 4,
+        "approve": true,
+        "bannerImage": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+        "title": "JavaScript Async Programming Explained",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+            "name": "Robert Brown"
+        },
+        "date": "2025-01-02",
+        "insights": {
+            "theme": "Understanding asynchronous programming in JavaScript",
+            "tone": "Informative and technical",
+            "lesson": "Grasping asynchronous concepts like promises and async/await is crucial for modern JavaScript development."
+        }
+    },
+    {
+        "id": 5,
+        "approve": true,
+        "bannerImage": "https://media.istockphoto.com/id/1399565382/photo/young-happy-mixed-race-businessman-standing-with-his-arms-crossed-working-alone-in-an-office.jpg?s=612x612&w=0&k=20&c=buXwOYjA_tjt2O3-kcSKqkTp2lxKWJJ_Ttx2PhYe3VM=",
+        "title": "Building RESTful APIs with Node.js",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://example.com/author6.jpg",
+            "name": "David Lee"
+        },
+        "date": "2024-12-30",
+        "insights": {
+            "theme": "Creating scalable APIs with Node.js",
+            "tone": "Technical and practical",
+            "lesson": "Node.js and Express provide a robust foundation for building RESTful APIs efficiently."
+        }
+    },
+    {
+        "id": 4324,
+        "approve": true,
+        "bannerImage": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+        "title": "JavaScript Async Programming Explained",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+            "name": "Robert Brown"
+        },
+        "date": "2025-01-02",
+        "insights": {
+            "theme": "Understanding asynchronous programming in JavaScript",
+            "tone": "Informative and technical",
+            "lesson": "Grasping asynchronous concepts like promises and async/await is crucial for modern JavaScript development."
+        }
+    },
+    {
+        "id": 536456546,
+        "approve": true,
+        "bannerImage": "https://media.istockphoto.com/id/1399565382/photo/young-happy-mixed-race-businessman-standing-with-his-arms-crossed-working-alone-in-an-office.jpg?s=612x612&w=0&k=20&c=buXwOYjA_tjt2O3-kcSKqkTp2lxKWJJ_Ttx2PhYe3VM=",
+        "title": "Building RESTful APIs with Node.js",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://example.com/author6.jpg",
+            "name": "David Lee"
+        },
+        "date": "2024-12-30",
+        "insights": {
+            "theme": "Creating scalable APIs with Node.js",
+            "tone": "Technical and practical",
+            "lesson": "Node.js and Express provide a robust foundation for building RESTful APIs efficiently."
+        }
+    },
+    {
+        "id": 1231231234,
+        "approve": true,
+        "bannerImage": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+        "title": "JavaScript Async Programming Explained",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+            "name": "Robert Brown"
+        },
+        "date": "2025-01-02",
+        "insights": {
+            "theme": "Understanding asynchronous programming in JavaScript",
+            "tone": "Informative and technical",
+            "lesson": "Grasping asynchronous concepts like promises and async/await is crucial for modern JavaScript development."
+        }
+    },
+    {
+        "id": 54354652137821,
+        "approve": false,
+        "bannerImage": "https://media.istockphoto.com/id/1399565382/photo/young-happy-mixed-race-businessman-standing-with-his-arms-crossed-working-alone-in-an-office.jpg?s=612x612&w=0&k=20&c=buXwOYjA_tjt2O3-kcSKqkTp2lxKWJJ_Ttx2PhYe3VM=",
+        "title": "Building RESTful APIs with Node.js",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://example.com/author6.jpg",
+            "name": "David Lee"
+        },
+        "date": "2024-12-30",
+        "insights": {
+            "theme": "Creating scalable APIs with Node.js",
+            "tone": "Technical and practical",
+            "lesson": "Node.js and Express provide a robust foundation for building RESTful APIs efficiently."
+        }
+    },
+    {
+        "id": 1222225,
+        "approve": false,
+        "bannerImage": "https://media.istockphoto.com/id/1399565382/photo/young-happy-mixed-race-businessman-standing-with-his-arms-crossed-working-alone-in-an-office.jpg?s=612x612&w=0&k=20&c=buXwOYjA_tjt2O3-kcSKqkTp2lxKWJJ_Ttx2PhYe3VM=",
+        "title": "Building RESTful APIs with Node.js",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://example.com/author6.jpg",
+            "name": "David Lee"
+        },
+        "date": "2024-12-30",
+        "insights": {
+            "theme": "Creating scalable APIs with Node.js",
+            "tone": "Technical and practical",
+            "lesson": "Node.js and Express provide a robust foundation for building RESTful APIs efficiently."
+        }
+    },
+    {
+        "id": 4444444324,
+        "approve": false,
+        "bannerImage": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+        "title": "JavaScript Async Programming Explained",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+            "name": "Robert Brown"
+        },
+        "date": "2025-01-02",
+        "insights": {
+            "theme": "Understanding asynchronous programming in JavaScript",
+            "tone": "Informative and technical",
+            "lesson": "Grasping asynchronous concepts like promises and async/await is crucial for modern JavaScript development."
+        }
+    },
+    {
+        "id": 53555555556456546,
+        "approve": false,
+        "bannerImage": "https://media.istockphoto.com/id/1399565382/photo/young-happy-mixed-race-businessman-standing-with-his-arms-crossed-working-alone-in-an-office.jpg?s=612x612&w=0&k=20&c=buXwOYjA_tjt2O3-kcSKqkTp2lxKWJJ_Ttx2PhYe3VM=",
+        "title": "Building RESTful APIs with Node.js",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://example.com/author6.jpg",
+            "name": "David Lee"
+        },
+        "date": "2024-12-30",
+        "insights": {
+            "theme": "Creating scalable APIs with Node.js",
+            "tone": "Technical and practical",
+            "lesson": "Node.js and Express provide a robust foundation for building RESTful APIs efficiently."
+        }
+    },
+    {
+        "id": 12312366666661234,
+        "approve": false,
+        "bannerImage": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+        "title": "JavaScript Async Programming Explained",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://media.istockphoto.com/id/1317804578/photo/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=0&k=20&c=EqR2Lffp4tkIYzpqYh8aYIPRr-gmZliRHRxcQC5yylY=",
+            "name": "Robert Brown"
+        },
+        "date": "2025-01-02",
+        "insights": {
+            "theme": "Understanding asynchronous programming in JavaScript",
+            "tone": "Informative and technical",
+            "lesson": "Grasping asynchronous concepts like promises and async/await is crucial for modern JavaScript development."
+        }
+    },
+    {
+        "id": 543546577772137821,
+        "approve": false,
+        "bannerImage": "https://media.istockphoto.com/id/1399565382/photo/young-happy-mixed-race-businessman-standing-with-his-arms-crossed-working-alone-in-an-office.jpg?s=612x612&w=0&k=20&c=buXwOYjA_tjt2O3-kcSKqkTp2lxKWJJ_Ttx2PhYe3VM=",
+        "title": "Building RESTful APIs with Node.js",
+        "description": "Your empathetic nature is a powerful asset, enabling you to build meaningful relationships and understand others deeply. However, it can also lead to emotional fatigue if boundaries aren't maintained.",
+        "author": {
+            "image": "https://example.com/author6.jpg",
+            "name": "David Lee"
+        },
+        "date": "2024-12-30",
+        "insights": {
+            "theme": "Creating scalable APIs with Node.js",
+            "tone": "Technical and practical",
+            "lesson": "Node.js and Express provide a robust foundation for building RESTful APIs efficiently."
+        }
+    }
+]
