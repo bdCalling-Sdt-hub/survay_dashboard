@@ -66,13 +66,12 @@ const menuItems = [
 
 function DashBoardLayOut() {
   const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate(); // Hook for navigation
-  const location = useLocation(); // Hook for accessing the current path
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const handleMenuClick = ({ key }) => {
     const selectedItem = menuItems.find((item) => item.key === key);
     if (selectedItem) {
-      navigate(selectedItem.path); // Navigate to the selected path
+      navigate(selectedItem.path);
     }
   };
 
@@ -114,6 +113,7 @@ function DashBoardLayOut() {
       </Button>
     </div>
   );
+
 
   return (
     <Layout style={{ maxHeight: '100vh', overflow: 'hidden' }}>
