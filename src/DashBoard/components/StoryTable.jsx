@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Modal, Table } from "antd";
 import { FaEye, FaRegCalendarCheck, FaRegTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -8,7 +8,8 @@ const StoryTable = () => {
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeFilter, setActiveFilter] = useState("notApproved"); // Track active filter
+    const [activeFilter, setActiveFilter] = useState("notApproved");
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const handleDelete = () => {
         Swal.fire({
@@ -56,6 +57,12 @@ const StoryTable = () => {
         });
     };
 
+    const handleUserDetails = (user) => {
+        setIsModalVisible(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+    };
     const columns = [
         {
             title: "SL No",
@@ -109,6 +116,7 @@ const StoryTable = () => {
             render: (_, record) => (
                 <div className="flex items-center gap-2">
                     <FaEye
+                        onClick={() => handleUserDetails(record)}
                         className="text-white cursor-pointer bg-[#00B0F2] w-8 p-2 hover:opacity-75 h-8 rounded-md"
                     />
                     {!record.approve && (
@@ -170,6 +178,16 @@ const StoryTable = () => {
                 }}
                 rowKey="id"
             />
+            <Modal
+                title={null}
+                open={isModalVisible}
+                onCancel={handleCloseModal}
+                footer={null}
+                width={1200}
+                className="user-modal md:min-w-[800px]"
+            >
+                hosain
+            </Modal>
         </div>
     );
 };

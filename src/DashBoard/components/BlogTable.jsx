@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Modal, Table } from "antd";
 import { FaEye, FaEdit, FaTrash, FaRegTrashAlt } from "react-icons/fa";
 import axios from "axios";
-import { MdMessage } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
+import BlogCustomize from "./BlogCustomize";
+import BlogEdit from "./BlogEdit";
 
 const BlogTable = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showBlogModal, setShowBlogModal] = useState(false);
+    const [showEditBlogModal, setShowEditBlogModal] = useState(false);
+    const [selectedBlog, setSelectedBlog] = useState(null);
 
-    const handleDelete = () => {
+    // Delete handler with confirmation
+    const handleDelete = (id) => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -18,17 +23,15 @@ const BlogTable = () => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
-                    icon: "success"
-                });
+                // Filter out the deleted blog
+                setData(data.filter((blog) => blog.id !== id));
+                Swal.fire("Deleted!", "Your blog has been deleted.", "success");
             }
         });
-    }
+    };
 
     const columns = [
         {
@@ -91,19 +94,30 @@ const BlogTable = () => {
             width: 120,
             render: (_, record) => (
                 <div className="flex items-center gap-2">
-                    <FaEye className="text-white  hover:opacity-75 bg-[#00B0F2] w-8 p-2 
-                     h-8 rounded-md" />
-                    <MdModeEdit className="text-white  hover:opacity-75 w-8 p-2 
-                     h-8 rounded-md bg-[#2d5882]" />
-                    <FaRegTrashAlt onClick={() => handleDelete()} className="text-white  hover:opacity-75 w-8 p-2 
-                     h-8 rounded-md bg-red-600" />
-
+                    <FaEye
+                        onClick={() => {
+                            setSelectedBlog(record);
+                            setShowBlogModal(true); // Show the details modal
+                        }}
+                        className="text-white hover:opacity-75 bg-[#00B0F2] w-8 p-2 h-8 rounded-md"
+                    />
+                    <MdModeEdit
+                        onClick={() => {
+                            setSelectedBlog(record);
+                            setShowEditBlogModal(true); // Show the edit modal
+                        }}
+                        className="text-white hover:opacity-75 w-8 p-2 h-8 rounded-md bg-[#2d5882]"
+                    />
+                    <FaRegTrashAlt
+                        onClick={() => handleDelete(record.id)}
+                        className="text-white hover:opacity-75 w-8 p-2 h-8 rounded-md bg-red-600"
+                    />
                 </div>
             ),
         },
     ];
 
-    // Fetching data using axios
+    // Fetch data using axios
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -133,6 +147,32 @@ const BlogTable = () => {
                 }}
                 rowKey="id"
             />
+
+            {/* Blog Details Modal */}
+            {showBlogModal && selectedBlog && (
+                <Modal
+                    title="Blog Details"
+                    open={showBlogModal}
+                    onCancel={() => setShowBlogModal(false)}
+                    footer={null}
+                    width={1200}
+                >
+                    <BlogCustomize setShowBlogModal={setShowBlogModal} showBlogModal={showBlogModal} selectedBlog={selectedBlog}></BlogCustomize>
+                </Modal>
+            )}
+
+            {/* Blog Edit Modal */}
+            {showEditBlogModal && selectedBlog && (
+                <Modal
+                    title="Edit Blog"
+                    open={showEditBlogModal}
+                    onCancel={() => setShowEditBlogModal(false)}
+                    footer={null}
+                    width={1200}
+                >
+                    <BlogEdit setShowEditBlogModal={setShowEditBlogModal} selectedBlog={selectedBlog}></BlogEdit>
+                </Modal>
+            )}
         </div>
     );
 };

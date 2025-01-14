@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { Table, Input } from "antd";
+import { Table, Input, Modal, Button, Select } from "antd";
 import { MdBlock, MdMessage } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { FaEye, FaUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { GrAnnounce } from "react-icons/gr";
+import TextArea from "antd/es/input/TextArea";
 
 const UserTable = () => {
     const [searchText, setSearchText] = useState("");
     const [sortedInfo, setSortedInfo] = useState({});
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [announce, setAnnounce] = useState(false);
 
     const handleSearch = (e) => {
         setSearchText(e.target.value.toLowerCase());
@@ -17,7 +22,7 @@ const UserTable = () => {
         setSortedInfo(sorter);
     };
 
-    const handleShowModal = () => {
+    const handleBockUser = () => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -29,14 +34,38 @@ const UserTable = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                    title: "block!",
-                    text: "Your file has been block.",
+                    title: "Blocked!",
+                    text: "User has been blocked.",
                     icon: "success"
                 });
             }
         });
-    }
+    };
 
+    const handleUserDetails = (user) => {
+        setSelectedUser(user);
+        setIsModalVisible(true);
+    };
+    const showAnnounceModal = () => {
+        setAnnounce(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+        setSelectedUser(null);
+    };
+    const handleCloseAnnounceModal = () => {
+        setAnnounce(false);
+    };
+
+    const handleCancel = () => {
+        setAnnounce(false);
+    };
+
+    const handleSend = () => {
+        console.log("Announcement Sent");
+        setAnnounce(false);
+    };
 
     const columns = [
         {
@@ -93,18 +122,17 @@ const UserTable = () => {
             title: "Action",
             key: "operation",
             fixed: "right",
-            width: 100,
+            width: 150,
             render: (_, record) => (
-
                 <div className="flex items-center gap-2">
                     <FaUser
+                        onClick={() => handleUserDetails(record)}
                         className="text-white w-8 p-2 cursor-pointer hover:opacity-75 h-8 rounded-md bg-blue-300"
                     />
                     <MdBlock
-                        onClick={() => handleShowModal()}
+                        onClick={() => handleBockUser()}
                         className="text-white w-8 p-2 cursor-pointer hover:opacity-75 h-8 rounded-md bg-red-600"
                     />
-
                     <Link
                         to={`https://mail.google.com/mail/?view=cm&fs=1&to=${record.email}`}
                         target="_blank"
@@ -135,24 +163,181 @@ const UserTable = () => {
 
     return (
         <div>
-            <Input.Search
-                placeholder="Search by Username"
-                onChange={handleSearch}
-                style={{ marginBottom: 16 }}
-            />
+            <div className="flex items-center gap-2">
+                <Input.Search
+                    placeholder="Search by Username"
+                    onChange={handleSearch}
+                    style={{ marginBottom: 16 }}
+                />
+                <Button
+                    onClick={() => showAnnounceModal()}
+                    style={{ marginBottom: 16, fontSize: '20px' }}
+                >
+                    <GrAnnounce />
+                </Button>
+            </div>
             <Table
                 columns={columns}
                 dataSource={filteredData}
                 pagination={{
+                    showSizeChanger: false,
                     pageSize: 8,
+                    showTotal: (total, range) =>
+                        `${range[0]}-${range[1]} of ${total} items`,
                 }}
                 scroll={{
                     x: 1500,
                 }}
                 onChange={handleChange}
             />
+
+            {/* User Details Modal */}
+            <Modal
+                title={null}
+                open={isModalVisible}
+                onCancel={handleCloseModal}
+                footer={null}
+                className="user-modal md:min-w-[800px]"
+            >
+                {selectedUser && (
+                    <div className="p-4">
+                        {/* Profile Header */}
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="w-24 h-24 rounded-full p-[3px] border-[3px] border-blue-500 overflow-hidden">
+                                <img
+                                    className="w-full h-full rounded-full object-cover"
+                                    src={selectedUser.userImage}
+                                    alt={selectedUser.userName}
+                                />
+                            </div>
+                            <div>
+                                <h1 className="text-xl font-bold">{selectedUser.userName}</h1>
+                                <p className="text-sm text-gray-500">
+                                    "Unlock Your Potential: Discover, Embrace, and Share Your 'Why'"
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* User Profile Section */}
+                        <h3 className="text-lg font-semibold mb-2">User Profile</h3>
+
+                        <div className="flex gap-12 w-full">
+                            {/* Personal Info */}
+                            <div className="flex-1">
+                                <h4 className="text-md font-semibold mt-4 mb-2">Personal</h4>
+                                <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                    <strong>Name:</strong> {selectedUser.userName || "N/A"}
+                                </p>
+                                <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                    <strong>Profession:</strong> {selectedUser.profession || "Developer"}
+                                </p>
+                                <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                    <strong>Date of Birth:</strong> {selectedUser.dob || "05/05/2002"}
+                                </p>
+                                <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                    <strong>Education level:</strong> {selectedUser.education || "Bachelor's Degree"}
+                                </p>
+                            </div>
+
+
+                            {/* Contact Info */}
+                            <div className="flex-1">
+                                <h4 className="text-md font-semibold mt-4 mb-2">Contact</h4>
+                                <div>
+                                    <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                        <strong>Email:</strong> {selectedUser.email || "N/A"}
+                                    </p>
+                                    <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                        <strong>Phone Number:</strong> {selectedUser.phone || "N/A"}
+                                    </p>
+                                    <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                        <strong>Country:</strong> {selectedUser.country || "Bangladesh"}
+                                    </p>
+                                    <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
+                                        <strong>City:</strong> {selectedUser.city || "N/A"}
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        {/* Footer Actions */}
+                        <div className="flex justify-end mt-6">
+                            <div className=" flex gap-2">
+                                <button
+                                    className="bg-[#f0f8ff] hover:opacity-75 border-[1px] border-[#00b0f2] text-[#00b0f2] px-4 py-2 rounded-md"
+                                    onClick={() => handleDeleteUser(selectedUser.id)}
+                                >
+                                    Delete User
+                                </button>
+                                <button
+                                    className="hover:bg-[#f0f8ff] hover:border-[1px] hover:border-[#00b0f2] hover:text-[#00b0f2] bg-[#00b0f2]  border-[1px] border-[#00b0f2] text-white px-4 py-2 rounded-md"
+                                    onClick={() => handleBlockUser(selectedUser.id)}
+                                >
+                                    Block
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </Modal>
+
+            <Modal
+                title="Send an Announcement to Users"
+                open={announce}
+                onCancel={handleCloseAnnounceModal}
+                footer={null}
+                centered
+            >
+                {/* Announcement Title */}
+                <div className="mb-4">
+                    <label className="block font-semibold mb-1">Announcement Title:</label>
+                    <Input
+                        placeholder='"Upcoming Maintenance Notification"'
+                        className="w-full"
+                    />
+                </div>
+
+                {/* Message */}
+                <div className="mb-4">
+                    <label className="block font-semibold mb-1">Message:</label>
+                    <TextArea
+                        rows={4}
+                        placeholder='"Dear Users, we will be performing a scheduled system maintenance on [Date] from [Start Time] to [End Time]. During this time, the site may be temporarily unavailable. We apologize for any inconvenience caused. Thank you for your understanding."'
+                    />
+                </div>
+
+                {/* Recipient User */}
+                <div className="mb-6">
+                    <label className="block font-semibold mb-1">Recipient User:</label>
+                    <div className="flex items-center gap-4">
+                        <Input
+                            type="number"
+                            placeholder="36"
+                            className="flex-grow"
+                        />
+                        <Select
+                            value={'All Users'}
+                            onChange={(value) => setRecipient(value)}
+                            style={{ width: 120 }}
+                        >
+                            <Option value="all">All Users</Option>
+                            <Option value="specific">Specific User</Option>
+                        </Select>
+                    </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end gap-4">
+                    <Button onClick={handleCancel}>Cancel</Button>
+                    <Button type="primary" onClick={handleSend}>
+                        Send
+                    </Button>
+                </div>
+            </Modal>
         </div>
     );
 };
 
 export default UserTable;
+
+

@@ -119,7 +119,7 @@ function DashBoardLayOut() {
     <Layout style={{ maxHeight: '100vh', overflow: 'hidden' }}>
       {/* Sidebar */}
       <Sider
-        width={250}
+        width={300}
         collapsible
         collapsed={collapsed}
         onCollapse={setCollapsed}
@@ -143,7 +143,7 @@ function DashBoardLayOut() {
           <img src={brandLogo} alt="logo" style={{ width: '100px' }} />
         </div>
         <Menu
-          style={{ background: '#e6f3fe' }}
+          style={{ background: '#e6f3fe',fontSize:'16px' }}
           mode="inline"
           onClick={handleMenuClick}
           selectedKeys={[
@@ -155,8 +155,8 @@ function DashBoardLayOut() {
             label: item.label,
             style:
               location.pathname === item.path
-                ? { background: '#c0e9fc', color: '#111' }
-                : {},
+                ? { background: '#c0e9fc', color: '#111',fontWeight:'bold',marginTop:'15px' }
+                : {marginTop:'15px'},
           }))}
         />
       </Sider>
@@ -206,7 +206,7 @@ function DashBoardLayOut() {
                     style={{ display: 'flex', alignItems: 'center' }}
                   >
                     <Avatar src={user.photoURL} size="large" style={{ backgroundColor: '#000' }} />
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-start mt-2 gap-1">
                       <p className="font-semibold text-sm">{user?.email}</p>
                       <IoMdArrowDropdown />
                     </div>

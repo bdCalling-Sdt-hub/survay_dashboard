@@ -31,7 +31,7 @@ const GrowthChart = () => {
           <YAxis stroke="#333" />
           <Tooltip />
           {/* Adjust barSize to increase bar width */}
-          <Bar dataKey="uv" fill="#29b6f6" barSize={90} radius={[10, 10, 0, 0]} />
+          <Bar dataKey="uv" fill="#29b6f6" barSize={50} radius={[10, 10, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

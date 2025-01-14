@@ -1,19 +1,27 @@
 import React, { useState } from "react";
-import { Table, Input } from "antd";
+import { Table, Input, Modal } from "antd";
 import { MdMessage } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
+import ResultOfWhyUser from "./ResultOfWhyUser";
 
 const WhyTable = () => {
     const [searchText, setSearchText] = useState("");
     const [sortedInfo, setSortedInfo] = useState({});
-
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const handleSearch = (e) => {
         setSearchText(e.target.value.toLowerCase());
     };
 
     const handleChange = (_, __, sorter) => {
         setSortedInfo(sorter);
+    };
+
+    const handleUserDetails = (user) => {
+        setIsModalVisible(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
     };
 
 
@@ -71,6 +79,7 @@ const WhyTable = () => {
             render: (_, record) => (
                 <div className="flex items-center gap-2">
                     <FaEye
+                        onClick={() => handleUserDetails(record)}
                         className="text-white w-8 p-2 cursor-pointer hover:opacity-75 h-8 rounded-md bg-blue-300"
                     />
 
@@ -111,6 +120,7 @@ const WhyTable = () => {
                 columns={columns}
                 dataSource={filteredData}
                 pagination={{
+                    showSizeChanger: false,
                     pageSize: 8,
                 }}
                 scroll={{
@@ -118,6 +128,16 @@ const WhyTable = () => {
                 }}
                 onChange={handleChange}
             />
+            <Modal
+                title={null}
+                open={isModalVisible}
+                onCancel={handleCloseModal}
+                footer={null}
+                width={1200}
+                className="user-modal md:min-w-[800px]"
+            >
+                <ResultOfWhyUser />
+            </Modal>
         </div>
     );
 };

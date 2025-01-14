@@ -40,10 +40,10 @@ function page() {
   ]
   return (
     <div className='flex items-center flex-col justify-center gap-12'>
-      <div className='flex items-center justify-center gap-12'>
+      <div className='flex  items-center justify-center gap-12 w-full'>
         {
           data.map((card, idx) => (
-            <div key={idx} className='flex flex-col p-12 border-2  rounded-md shadow-md bg-[#f0f8ff] items-center gap-4  h-48'>
+            <div key={idx} className='flex flex-1 text-center  flex-col p-12  rounded-md shadow-md bg-[#f0f8ff] items-center gap-4  h-48'>
               <h1>{card.title}</h1>
               <img src={card.icon} alt={card.title} />
               <p><strong>{card.number}</strong></p>
