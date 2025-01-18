@@ -77,9 +77,9 @@ function DashBoardLayOut() {
 
   const user = {
     login: true,
-    photoURL: 'https://github.com/shadcn.png',
+    photoURL: 'https://randomuser.me/api/portraits/men/75.jpg',
     displayName: 'Hosain Ali',
-    email: 'example@mail.com',
+    email: 'Asadujjaman@gmail.com',
   };
 
   const navigateToSettings = () => {

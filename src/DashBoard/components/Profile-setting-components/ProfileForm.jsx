@@ -1,9 +1,15 @@
 import { Form, Input, Button, Typography } from "antd";
+import Swal from "sweetalert2";
 
 const ProfileForm = () => {
     const { Title } = Typography;
     const onFinish = (values) => {
         console.log("Form values:", values);
+        Swal.fire({
+            title: "Save Change!",
+            text: "you chnage the profile!",
+            icon: "success",
+          });
     };
 
     return (
