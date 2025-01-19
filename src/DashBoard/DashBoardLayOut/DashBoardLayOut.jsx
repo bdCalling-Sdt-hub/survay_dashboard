@@ -1,66 +1,66 @@
-import{ useState } from 'react';
-import { Layout, Menu, Typography, Avatar, Dropdown, Button } from 'antd';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate, Outlet, and useLocation
+import { useState } from "react";
+import { Layout, Menu, Typography, Avatar, Dropdown, Button } from "antd";
+import { Outlet, useNavigate, useLocation } from "react-router-dom"; // Import useNavigate, Outlet, and useLocation
 import {
   UserOutlined,
   DashboardOutlined,
   SettingOutlined,
-} from '@ant-design/icons';
-import { RiTodoLine } from 'react-icons/ri';
-import { BsFillQuestionOctagonFill } from 'react-icons/bs';
-import { FaEdit, FaRegBell } from 'react-icons/fa';
-import { IoWalletSharp } from 'react-icons/io5';
-import { IoMdArrowDropdown } from 'react-icons/io';
-import { CiSettings, CiLogout } from 'react-icons/ci';
-import 'antd/dist/reset.css';
-import AllNotification from '../components/AllNotification';
-import brandLogo from '../../assets/BrandIcon.svg';
+} from "@ant-design/icons";
+import { RiTodoLine } from "react-icons/ri";
+import { BsFillQuestionOctagonFill } from "react-icons/bs";
+import { FaEdit, FaRegBell } from "react-icons/fa";
+import { IoWalletSharp } from "react-icons/io5";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { CiSettings, CiLogout } from "react-icons/ci";
+import "antd/dist/reset.css";
+import AllNotification from "../components/AllNotification";
+import brandLogo from "../../assets/BrandIcon.svg";
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 
 const menuItems = [
   {
-    key: '1',
+    key: "1",
     icon: <DashboardOutlined />,
-    label: 'Admin Dashboard',
-    path: '/',
+    label: "Admin Dashboard",
+    path: "/",
   },
   {
-    key: '2',
+    key: "2",
     icon: <RiTodoLine />,
-    label: 'WHY Management',
-    path: '/dashboard/why-manage',
+    label: "WHY Management",
+    path: "/dashboard/why-manage",
   },
   {
-    key: '3',
+    key: "3",
     icon: <BsFillQuestionOctagonFill />,
-    label: 'Story Management',
-    path: '/dashboard/story-manage',
+    label: "Story Management",
+    path: "/dashboard/story-manage",
   },
   {
-    key: '4',
+    key: "4",
     icon: <UserOutlined />,
-    label: 'User Management',
-    path: '/dashboard/user-manage',
+    label: "User Management",
+    path: "/dashboard/user-manage",
   },
   {
-    key: '5',
+    key: "5",
     icon: <FaEdit />,
-    label: 'Blogs Management',
-    path: '/dashboard/blogs-manage',
+    label: "Blogs Management",
+    path: "/dashboard/blogs-manage",
   },
   {
-    key: '6',
+    key: "6",
     icon: <IoWalletSharp />,
-    label: 'Donation Management',
-    path: '/dashboard/donation-manage',
+    label: "Donation Management",
+    path: "/dashboard/donation-manage",
   },
   {
-    key: '7',
+    key: "7",
     icon: <SettingOutlined />,
-    label: 'Profile Setting',
-    path: '/dashboard/profile-setting',
+    label: "Profile Setting",
+    path: "/dashboard/profile-setting",
   },
 ];
 
@@ -77,21 +77,21 @@ function DashBoardLayOut() {
 
   const user = {
     login: true,
-    photoURL: 'https://randomuser.me/api/portraits/men/75.jpg',
-    displayName: 'Hosain Ali',
-    email: 'Asadujjaman@gmail.com',
+    photoURL: "https://randomuser.me/api/portraits/men/75.jpg",
+    displayName: "Hosain Ali",
+    email: "Asadujjaman@gmail.com",
   };
 
   const navigateToSettings = () => {
-    navigate('/dashboard/profile-setting');
+    navigate("/dashboard/profile-setting");
   };
 
   const handleSignOut = () => {
-    console.log('Sign Out');
+    console.log("Sign Out");
   };
 
   const notificationMenu = (
-    <div style={{ padding: '10px', width: '200px' }}>
+    <div style={{ padding: "10px", width: "200px" }}>
       <AllNotification />
     </div>
   );
@@ -99,13 +99,18 @@ function DashBoardLayOut() {
   const userMenu = (
     <div
       style={{
-        padding: '10px',
-        width: '200px',
-        backgroundColor: '#E5E7EB',
-        borderRadius: '5px',
+        padding: "10px",
+        width: "200px",
+        backgroundColor: "#E5E7EB",
+        borderRadius: "5px",
       }}
     >
-      <Button type="text" block icon={<CiSettings />} onClick={navigateToSettings}>
+      <Button
+        type="text"
+        block
+        icon={<CiSettings />}
+        onClick={navigateToSettings}
+      >
         Settings
       </Button>
       <Button type="text" block icon={<CiLogout />} onClick={handleSignOut}>
@@ -114,9 +119,8 @@ function DashBoardLayOut() {
     </div>
   );
 
-
   return (
-    <Layout style={{ maxHeight: '100vh', overflow: 'hidden' }}>
+    <Layout style={{ maxHeight: "100vh", overflow: "hidden" }}>
       {/* Sidebar */}
       <Sider
         width={300}
@@ -124,26 +128,19 @@ function DashBoardLayOut() {
         collapsed={collapsed}
         onCollapse={setCollapsed}
         style={{
-          background: '#e6f3fe',
-          position: 'sticky',
+          background: "#e6f3fe",
+          position: "sticky",
           top: 0,
-          height: '100vh',
+          height: "100vh",
           width: 50,
-          overflow: 'auto',
+          overflow: "auto",
         }}
       >
-        <div
-          style={{
-            textAlign: 'center',
-            padding: '16px 0',
-            fontSize: '18px',
-            fontWeight: 'bold',
-          }}
-        >
-          <img src={brandLogo} alt="logo" style={{ width: '100px' }} />
+        <div className=" flex items-center justify-center my-2">
+          <img src={brandLogo} alt="logo" />
         </div>
         <Menu
-          style={{ background: '#e6f3fe',fontSize:'16px' }}
+          style={{ background: "#e6f3fe", fontSize: "16px" }}
           mode="inline"
           onClick={handleMenuClick}
           selectedKeys={[
@@ -155,26 +152,31 @@ function DashBoardLayOut() {
             label: item.label,
             style:
               location.pathname === item.path
-                ? { background: '#c0e9fc', color: '#111',fontWeight:'bold',marginTop:'15px' }
-                : {marginTop:'15px'},
+                ? {
+                    background: "#c0e9fc",
+                    color: "#111",
+                    fontWeight: "bold",
+                    marginTop: "15px",
+                  }
+                : { marginTop: "15px" },
           }))}
         />
       </Sider>
 
       {/* Main Layout */}
-      <Layout style={{ overflow: 'hidden' }}>
+      <Layout style={{ overflow: "hidden" }}>
         {/* Header */}
         <Header
           style={{
-            background: '#fff',
-            padding: '0 16px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            position: 'sticky',
+            background: "#fff",
+            padding: "0 16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: "sticky",
             top: 0,
             zIndex: 1000,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Title level={4} className="w-full">
@@ -182,17 +184,21 @@ function DashBoardLayOut() {
               <div className="flex items-center"></div>
               <div className="flex items-center gap-4">
                 {/* Notification Dropdown */}
-                <Dropdown overlay={notificationMenu} trigger={['click']} placement="bottomRight">
+                <Dropdown
+                  overlay={notificationMenu}
+                  trigger={["click"]}
+                  placement="bottomRight"
+                >
                   <div
                     className="flex items-center gap-2 cursor-pointer"
                     style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      width: '40px',
-                      height: '40px',
-                      background: '#000',
-                      borderRadius: '50%',
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "40px",
+                      height: "40px",
+                      background: "#000",
+                      borderRadius: "50%",
                     }}
                   >
                     <FaRegBell className="text-white" />
@@ -200,12 +206,20 @@ function DashBoardLayOut() {
                 </Dropdown>
 
                 {/* User Dropdown */}
-                <Dropdown overlay={userMenu} trigger={['click']} placement="bottomRight">
+                <Dropdown
+                  overlay={userMenu}
+                  trigger={["click"]}
+                  placement="bottomRight"
+                >
                   <div
                     className="flex items-center gap-2 cursor-pointer"
-                    style={{ display: 'flex', alignItems: 'center' }}
+                    style={{ display: "flex", alignItems: "center" }}
                   >
-                    <Avatar src={user.photoURL} size="large" style={{ backgroundColor: '#000' }} />
+                    <Avatar
+                      src={user.photoURL}
+                      size="large"
+                      style={{ backgroundColor: "#000" }}
+                    />
                     <div className="flex items-start mt-2 gap-1">
                       <p className="font-semibold text-sm">{user?.email}</p>
                       <IoMdArrowDropdown />
@@ -221,11 +235,11 @@ function DashBoardLayOut() {
         <Content
           id="content"
           style={{
-            margin: '16px',
-            padding: '16px',
-            background: '#fff',
-            height: 'calc(100vh - 64px)',
-            overflowY: 'auto',
+            margin: "16px",
+            padding: "16px",
+            background: "#fff",
+            height: "calc(100vh - 64px)",
+            overflowY: "auto",
           }}
         >
           <Outlet />
