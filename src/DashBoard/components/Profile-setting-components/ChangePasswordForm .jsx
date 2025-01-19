@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import { Form, Input, Button, Typography } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
@@ -31,11 +31,15 @@ const ChangePasswordForm = () => {
         <Form.Item
           label="Current Password"
           name="currentPassword"
-          rules={[{ required: true, message: "Please enter your current password" }]}
+          rules={[
+            { required: true, message: "Please enter your current password" },
+          ]}
         >
           <Input.Password
             placeholder="Enter your current password"
-            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
           />
         </Form.Item>
 
@@ -53,7 +57,9 @@ const ChangePasswordForm = () => {
         >
           <Input.Password
             placeholder="Enter your new password"
-            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
           />
         </Form.Item>
 
@@ -76,7 +82,9 @@ const ChangePasswordForm = () => {
         >
           <Input.Password
             placeholder="Confirm your new password"
-            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
           />
         </Form.Item>
 

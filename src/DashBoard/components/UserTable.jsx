@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Table, Input, Modal, Button, Select } from "antd";
+import{ useState } from "react";
+import { Table, Input, Modal, Button } from "antd";
 import { MdBlock, MdMessage } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
@@ -304,26 +304,6 @@ const UserTable = () => {
                         rows={4}
                         placeholder='"Dear Users, we will be performing a scheduled system maintenance on [Date] from [Start Time] to [End Time]. During this time, the site may be temporarily unavailable. We apologize for any inconvenience caused. Thank you for your understanding."'
                     />
-                </div>
-
-                {/* Recipient User */}
-                <div className="mb-6">
-                    <label className="block font-semibold mb-1">Recipient User:</label>
-                    <div className="flex items-center gap-4">
-                        <Input
-                            type="number"
-                            placeholder="36"
-                            className="flex-grow"
-                        />
-                        <Select
-                            value={'All Users'}
-                            onChange={(value) => setRecipient(value)}
-                            style={{ width: 120 }}
-                        >
-                            <Option value="all">All Users</Option>
-                            <Option value="specific">Specific User</Option>
-                        </Select>
-                    </div>
                 </div>
 
                 {/* Action Buttons */}

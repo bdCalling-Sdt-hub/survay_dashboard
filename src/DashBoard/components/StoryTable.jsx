@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Table } from "antd";
 import { FaEye, FaRegCalendarCheck, FaRegTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -35,6 +35,8 @@ const StoryTable = () => {
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("notApproved");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState([]);
+  console.log(selectedUser);
 
   const handleDelete = () => {
     Swal.fire({
@@ -83,6 +85,7 @@ const StoryTable = () => {
   };
 
   const handleUserDetails = (user) => {
+    setSelectedUser(user);
     setIsModalVisible(true);
   };
   const handleCloseModal = () => {
@@ -131,7 +134,7 @@ const StoryTable = () => {
       title: "Publish Date",
       dataIndex: "date",
       key: "date",
-      sorter: (a, b) => new Date(a.date) - new Date(b.date), // Sorting logic
+      sorter: (a, b) => new Date(a.date) - new Date(b.date),
       render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
     },
     {
@@ -212,7 +215,7 @@ const StoryTable = () => {
         rowKey="id"
       />
       <Modal
-        title={story?.title || "Story Details"}
+        title={selectedUser?.title || "Story Details"}
         open={isModalVisible}
         onCancel={handleCloseModal}
         footer={null}
@@ -223,8 +226,11 @@ const StoryTable = () => {
           {/* Story Banner Image */}
           <div className="flex-shrink-0">
             <img
-              src={story?.bannerImage || "https://via.placeholder.com/300x200"}
-              alt={story?.title || "Story Banner"}
+              src={
+                selectedUser?.bannerImage ||
+                "https://via.placeholder.com/300x200"
+              }
+              alt={selectedUser?.title || "Story Banner"}
               className="rounded-lg object-cover w-full h-auto max-h-72"
             />
           </div>
@@ -234,21 +240,24 @@ const StoryTable = () => {
             {/* Title and Author Details */}
             <div className="mb-4">
               <h2 className="text-2xl font-bold text-gray-800">
-                {story?.title || "Story Title"}
+                {selectedUser?.title || "Story Title"}
               </h2>
               <div className="flex items-center mt-2 text-gray-600">
                 <img
-                  src={story?.author?.image || "https://via.placeholder.com/40"}
-                  alt={story?.author?.name || "Author"}
+                  src={
+                    selectedUser?.author?.image ||
+                    "https://via.placeholder.com/40"
+                  }
+                  alt={selectedUser?.author?.name || "Author"}
                   className="w-8 h-8 rounded-full object-cover mr-2"
                 />
                 <p className="text-sm">
-                  {story?.author?.name || "Unknown Author"}
+                  {selectedUser?.author?.name || "Unknown Author"}
                 </p>
                 <div className="flex items-center ml-4 text-sm">
                   <SlCalender className="mr-1" />
                   <span>
-                    {new Date(story?.date).toLocaleDateString() || "N/A"}
+                    {new Date(selectedUser?.date).toLocaleDateString() || "N/A"}
                   </span>
                 </div>
               </div>
@@ -256,8 +265,8 @@ const StoryTable = () => {
 
             {/* Story Description */}
             <div className="mb-6 text-gray-700">
-              {story?.description
-                ? story.description.split("\n").map((para, index) => (
+              {selectedUser?.description
+                ? story?.description?.split("\n").map((para, index) => (
                     <p key={index} className="mb-4">
                       {para}
                     </p>
@@ -266,20 +275,20 @@ const StoryTable = () => {
             </div>
 
             {/* Insights */}
-            {story?.insights && (
+            {selectedUser?.insights && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">
                   Story Insights:
                 </h3>
                 <ul className="list-disc pl-6 text-gray-700">
                   <li>
-                    <strong>Theme:</strong> {story.insights.theme}
+                    <strong>Theme:</strong> {selectedUser?.insights?.theme}
                   </li>
                   <li>
-                    <strong>Tone:</strong> {story.insights.tone}
+                    <strong>Tone:</strong> {selectedUser?.insights?.tone}
                   </li>
                   <li>
-                    <strong>Lesson:</strong> {story.insights.lesson}
+                    <strong>Lesson:</strong> {selectedUser?.insights?.lesson}
                   </li>
                 </ul>
               </div>

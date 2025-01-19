@@ -1,5 +1,5 @@
 import { Modal, Button, Input, Upload } from 'antd';
-import React, { useState, useEffect } from 'react';
+import{ useState, useEffect } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import JoditEditor from 'jodit-react';
 

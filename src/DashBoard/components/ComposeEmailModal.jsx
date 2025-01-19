@@ -1,7 +1,7 @@
 
 import { Modal, Input, Button, Tooltip } from 'antd';
 import { SendOutlined, DeleteOutlined, MoreOutlined, LinkOutlined, PaperClipOutlined, SmileOutlined, WarningOutlined, LockOutlined, PictureOutlined, EditOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import{ useState } from 'react';
 import Swal from 'sweetalert2';
 
 const ComposeEmailModal = ({ isModalVisible, setIsModalVisible, selectedRecord }) => {

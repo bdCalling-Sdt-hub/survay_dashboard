@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import{ useEffect, useState } from "react";
 import { Modal, Table } from "antd";
-import { FaEye, FaEdit, FaTrash, FaRegTrashAlt } from "react-icons/fa";
+import { FaEye, FaRegTrashAlt } from "react-icons/fa";
 import axios from "axios";
 import { MdModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
