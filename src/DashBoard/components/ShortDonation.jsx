@@ -1,89 +1,92 @@
+import { useState } from "react";
 import { Table } from "antd";
-import { MdMessage } from "react-icons/md";
-import { Link } from "react-router-dom";
 
 const ShortDonation = () => {
-    const columns = [
-        {
-            title: "SL No",
-            width: 100,
-            dataIndex: "slNo",
-            key: "name",
-            fixed: "left",
-        },
-        {
-            title: "User Name",
-            width: 100,
-            dataIndex: "age",
-            key: "age",
-            fixed: "left",
-        },
-        {
-            title: "Email",
-            dataIndex: "address",
-            key: "1",
-            width: 150,
-        },
-        {
-            title: "Donation Date",
-            dataIndex: "date",
-            key: "2",
-            width: 150,
-        },
-        {
-            title: "Transaction ID",
-            dataIndex: "transectionId",
-            key: "3",
-            width: 150,
-        },
-        {
-            title: "Amount",
-            dataIndex: "number",
-            key: "4",
-            width: 150,
-        },
-        {
-            title: "Message",
-            key: "operation",
-            fixed: "right",
-            width: 100,
-            render: (_, record) => (
-                <Link
-                    to={`https://mail.google.com/mail/?view=cm&fs=1&to=${record.address}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <MdMessage className="text-white w-8 p-2  hover:opacity-75 h-8 rounded-md bg-[#2d5882]" />
-                </Link>
-            ),
-        },
-    ];
-    const dataSource = Array.from({ length: 10 }).map((_, i) => ({
-        key: i,
-        slNo: i + 1,
-        date: "28 Jan, 12:30 AM",
-        age: `User ${i + 1}`,
-        address: `user${i + 1}@example.com`,
-        number: `$ ${Math.floor(Math.random() * 200)}`,
-        transectionId: Math.random() * 100,
-    }));
+  const [sortedInfo, setSortedInfo] = useState({});
 
-    return (
-        <Table
-            // loading={true}
-            columns={columns}
-            pagination={false}
-            dataSource={dataSource}
-            scroll={{
-                x: 1500,
-            }}
-            summary={() => (
-                <Table.Summary fixed="top">
-                    <Table.Summary.Row />
-                </Table.Summary>
-            )}
-        />
-    );
+  const handleChange = (_, __, sorter) => {
+    setSortedInfo(sorter);
+  };
+
+  const columns = [
+    {
+      title: "SL No",
+      width: 100,
+      dataIndex: "slNo",
+      key: "slNo",
+      fixed: "left",
+    },
+    {
+      title: "User Info",
+      width: 200,
+      dataIndex: "userInfo",
+      key: "userInfo",
+      fixed: "left",
+      render: (_, record) => (
+        <div className="flex items-center gap-3">
+          <img
+            src={record.userImage}
+            alt="User"
+            className="w-10 h-10 rounded-full"
+          />
+          <span>{record.userName}</span>
+        </div>
+      ),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      width: 150,
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+      width: 150,
+    },
+    {
+      title: "Signup Date",
+      dataIndex: "completionDate",
+      key: "completionDate",
+      width: 150,
+      sorter: (a, b) => new Date(a.completionDate) - new Date(b.completionDate),
+      sortOrder:
+        sortedInfo.columnKey === "completionDate" ? sortedInfo.order : null,
+    },
+    {
+      title: "WHY Status",
+      dataIndex: "status",
+      key: "status",
+      width: 150,
+    },
+  ];
+
+  const dataSource = Array.from({ length: 10 }).map((_, i) => ({
+    key: i,
+    slNo: i + 1,
+    userName: `User ${i + 1}`,
+    userImage: `https://i.pravatar.cc/150?img=${i + 1}`,
+    email: `user${i + 1}@example.com`,
+    address: "123 Street, Dhaka",
+    phone: `123-456-${i.toString().padStart(4, "0")}`,
+    status: "yes",
+    completionDate: `2025-01-${(i % 31) + 1} 12:${i % 60}:00`,
+  }));
+
+  return (
+    <div>
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        pagination={false}
+        scroll={{
+          x: 1500,
+        }}
+        onChange={handleChange}
+      />
+    </div>
+  );
 };
 
 export default ShortDonation;

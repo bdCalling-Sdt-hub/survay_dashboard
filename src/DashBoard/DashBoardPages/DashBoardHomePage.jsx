@@ -30,11 +30,11 @@ function page() {
       icon: whyIcon,
       number: 144061,
     },
-    {
-      title: "Total Earning",
-      icon: donateIcon,
-      number: "$ 144061",
-    },
+    // {
+    //   title: "Total Earning",
+    //   icon: donateIcon,
+    //   number: "$ 144061",
+    // },
   ];
   return (
     <div className="flex items-center flex-col justify-center gap-12">
@@ -55,9 +55,11 @@ function page() {
 
       <GrowthChart></GrowthChart>
       <div className="flex items-center justify-between w-full p-2 rounded-md bg-[#d6f4ff]">
-        <h1>Transition history</h1>
+        <h1 className="mt-2">Recent User</h1>
         <Link to={"/dashboard/donation-manage"}>
-          <Button className="bg-[#003366] hover:bg-[#003366]/70 text-white">See All History</Button>
+          <Button className="bg-[#003366]  hover:bg-[#003366]/70 text-white">
+            See All User
+          </Button>
         </Link>
       </div>
       <ShortDonation></ShortDonation>

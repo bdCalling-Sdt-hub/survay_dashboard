@@ -50,12 +50,12 @@ const menuItems = [
     label: "Blogs Management",
     path: "/dashboard/blogs-manage",
   },
-  {
-    key: "6",
-    icon: <IoWalletSharp />,
-    label: "Donation Management",
-    path: "/dashboard/donation-manage",
-  },
+  // {
+  //   key: "6",
+  //   icon: <IoWalletSharp />,
+  //   label: "Donation Management",
+  //   path: "/dashboard/donation-manage",
+  // },
   {
     key: "7",
     icon: <SettingOutlined />,
