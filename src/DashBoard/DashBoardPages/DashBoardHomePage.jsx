@@ -7,30 +7,43 @@ import blogIcon from "../../assets/blogIcon.svg";
 import whyIcon from "../../assets/why.svg";
 import ShortDonation from "../components/ShortDonation";
 import { useGetNormalUserQuery } from "../../redux/services/userApis";
+import {
+  useGetAllMetaDataQuery,
+  useGetOverViewsQuery,
+} from "../../redux/services/metaApis";
 
-
-function page() {
+function DashBoardHomePage() {
   const { data: userData, isLoading } = useGetNormalUserQuery({});
+  const { data: overViewData, isLoading: overViewDataLoading } =
+    useGetOverViewsQuery({ year: "2025" });
+  const { data: metaData, isLoading: isMetaDataLoading } =
+    useGetAllMetaDataQuery();
+
+  if (overViewDataLoading || isMetaDataLoading) {
+    return <p>..loading</p>;
+  }
+  const { totalUser, totalStory, totalWhy, totalBlog } = metaData.data;
+
   const data = [
     {
       title: "Total Users",
       icon: userIcon,
-      number: userData?.data?.result?.length,
+      number: totalUser,
     },
     {
       title: "Total Blogs",
       icon: blogIcon,
-      number: 144061,
+      number: totalBlog,
     },
     {
       title: "Total Clients Story",
       icon: storyIcon,
-      number: 144061,
+      number: totalStory,
     },
     {
       title: "Total WHY Finds",
       icon: whyIcon,
-      number: 144061,
+      number: totalWhy,
     },
     // {
     //   title: "Total Earning",
@@ -38,7 +51,6 @@ function page() {
     //   number: "$ 144061",
     // },
   ];
-
   return (
     <div className="flex items-center flex-col justify-center gap-12">
       <div className="flex  items-center justify-center gap-12 w-full">
@@ -70,4 +82,4 @@ function page() {
   );
 }
 
-export default page;
+export default DashBoardHomePage;
