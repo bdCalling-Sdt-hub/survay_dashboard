@@ -1,82 +1,102 @@
-import{ useState } from "react";
-import ProfileForm from "../components/Profile-setting-components/ProfileForm";
-import { CameraOutlined } from "@ant-design/icons";
-import { Button } from "antd";
-import ChangePasswordForm from "../components/Profile-setting-components/ChangePasswordForm ";
+import { useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import ProfileEdit from "../../components/ProfilePage/ProfileEdit.jsx";
+import ChangePassword from "../../components/ProfilePage/ChangePassword.jsx";
+import { Spin } from "antd";
+import { imageUrl } from "../../utils/server";
+import { useSuperAdminProfileGetQuery } from "../../redux/services/userApis.js";
 
-function ProfileSettingPage() {
-  const [activeTab, setActiveTab] = useState("profile"); // Track active tab
-  const [profile, setProfile] = useState({
-    firstName: "Mojahid",
-    surname: "Islam",
-    profession: "Software Engineer",
-    dateOfBirth: "1995-01-15",
-    educationLevel: "Bachelor's Degree",
-    email: "MojahidIslam@example.com",
-    phone: "+8801737705511",
-    country: "Bangladesh",
-    city: "Dhaka",
-  });
+const Tabs = ["Edit Profile", "Change Password"];
+
+const Profile = () => {
+  const [tab, setTab] = useState(Tabs[0]);
+  const { data, isLoading } = useSuperAdminProfileGetQuery({});
+  const [image, setImage] = useState(null);
+
+  const handleImageUpload = (e) => {
+    if (e.target.files?.[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  if (isLoading) {
+    return <Spin />;
+  }
+
+  const profileImage = image
+    ? URL.createObjectURL(image)
+    : data?.data?.profile_image
+    ? imageUrl(data.data.profile_image)
+    : "/path/to/default-image.jpg";
 
   return (
-    <div>
-      {/* Header Section */}
-      <div className="text-[#083a50] pt-4 px-4">
-        <div className=" flex flex-col items-center gap-8">
-          {/* Profile Picture */}
-          <div className="relative border-4 rounded-full border-[#083a50] w-28 h-28 lg:w-32 lg:h-32">
+    <>
+      {/* Profile Image Section */}
+      <div className="max-w-[700px] mx-auto bg-[var(--black-200)] p-4 rounded-md">
+        <div className="w-full center-center">
+          <div className="w-24 border-[1px] border-black h-24 rounded-full relative">
             <img
-              src="https://randomuser.me/api/portraits/men/75.jpg"
+              className="w-full  h-full object-cover rounded-full"
+              src={profileImage}
               alt="Profile"
-              className="w-full h-full object-cover rounded-full border-4 border-white"
             />
-            <div className="absolute bottom-2 right-2 bg-[#00b0f2] text-[#083a50] rounded-full p-1 cursor-pointer">
-              <CameraOutlined />
-            </div>
-          </div>
-
-          {/* Name and Buttons */}
-          <div className="flex-grow text-center text-[#083a50]">
-            <h1 className="text-3xl font-bold">
-              {profile.firstName} {profile.surname}
-            </h1>
-
-            <div className="flex gap-4 mt-4">
-              {/* Edit Profile Button */}
-              <Button
-                onClick={() => setActiveTab("profile")}
-                className={`${
-                  activeTab === "profile"
-                    ? "bg-[#00b0f2] text-white"
-                    : "bg-transparent text-[#083a50]"
-                } rounded-md`}
+            {tab === "Edit Profile" && (
+              <button
+                onClick={() => document.getElementById("fileInput")?.click()}
+                aria-label="Edit Profile Picture"
+                className="absolute right-0 bottom-2"
               >
-                Edit Profile
-              </Button>
+                <FaEdit
+                  size={24}
+                  className="bg-black text-white w-8 h-8 p-2 rounded-full"
+                />
+              </button>
+            )}
 
-              {/* Change Password Button */}
-              <Button
-                onClick={() => setActiveTab("changePassword")}
-                className={`${
-                  activeTab === "changePassword"
-                    ? "bg-[#00b0f2] text-white"
-                    : "bg-transparent text-[#083a50]"
-                } rounded-md`}
-              >
-                Change Password
-              </Button>
-            </div>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={{ display: "none" }}
+            />
           </div>
         </div>
+        <p className="text-2xl text-center text- mt-2">
+          {data?.data?.authId?.name || "User Name"}
+        </p>
       </div>
 
-      {/* Conditional Rendering */}
-      <div className="max-w-screen-2xl mx-auto py-2 px-4">
-        {activeTab === "profile" && <ProfileForm />}
-        {activeTab === "changePassword" && <ChangePasswordForm />}
+      {/* Tabs Section */}
+      <div className="w-full center-center my-3">
+        {Tabs.map((item) => (
+          <button
+            key={item}
+            style={{ width: "200px", justifyContent: "center" }}
+            className={`${
+              item === tab ? "sidebar-button-orange" : "sidebar-button-black"
+            }`}
+            onClick={() => setTab(item)}
+          >
+            {item}
+          </button>
+        ))}
       </div>
-    </div>
+
+      {/* Content Section (ProfileEdit or ChangePassword) */}
+      <div className="max-w-[700px] mx-auto bg-[var(--black-200)] p-4 rounded-md">
+        {tab === "Edit Profile" ? (
+          <ProfileEdit
+            image={image}
+            defaultImage={profileImage}
+            data={data?.data}
+          />
+        ) : (
+          <ChangePassword />
+        )}
+      </div>
+    </>
   );
-}
+};
 
-export default ProfileSettingPage;
+export default Profile;

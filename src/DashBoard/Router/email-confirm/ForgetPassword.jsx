@@ -1,28 +1,52 @@
-import { Form, Input, Button } from 'antd';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-
+import { Form, Input, Button, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useForgetEmailPostMutation } from "../../../redux/services/authApis";
 const ForgetPassword = () => {
+  const [forgotPassword, { isLoading }] = useForgetEmailPostMutation();
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   const onFinish = async (values) => {
+    const { email } = values;
+    const emailData = { email };
+
     try {
-      toast.success('Email verification successful!');
-      navigate('/auth/login/email-confirm/verify-email-otp');
-    } catch (error) {
-      console.error('Error during email verification:', error);
-      toast.error('An unexpected error occurred. Please try again.');
+      const response = await forgotPassword(emailData).unwrap();
+
+      if (response?.success) {
+        message.success("Check your email for the OTP.");
+        localStorage.setItem("email", email);
+        navigate("/auth/login/email-confirm/verify-email-otp");
+      } else {
+        const errorMessage =
+          response?.message || "An unexpected error occurred.";
+        setError(errorMessage);
+        message.error(errorMessage);
+      }
+    } catch (err) {
+      console.error("Request failed:", err);
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Something went wrong. Please try again later.";
+
+      setError(errorMessage);
+      message.error(errorMessage);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4">
       <div className="bg-white p-8 rounded-xl shadow-md max-w-md w-full">
-        <h1 className="text-center text-2xl font-bold mb-4">Forget Password?</h1>
+        <h1 className="text-center text-2xl font-bold mb-4">
+          Forget Password?
+        </h1>
         <p className="text-center text-gray-600 mb-6">
           Please enter your email to get a verification code
         </p>
+        {error && <p className="text-red-400 text-base">{error}</p>}
         <Form
           requiredMark={false}
           form={form}
@@ -35,8 +59,8 @@ const ForgetPassword = () => {
             name="email"
             label="Email address"
             rules={[
-              { required: true, message: 'Please enter your email!' },
-              { type: 'email', message: 'Please enter a valid email!' },
+              { required: true, message: "Please enter your email!" },
+              { type: "email", message: "Please enter a valid email!" },
             ]}
           >
             <Input

@@ -1,18 +1,32 @@
-
-import { Form, Input, Button, Typography } from "antd";
+import { Form, Input, Button, Typography, message, Spin } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { usePatchNewPasswordMutation } from "../../redux/services/authApis";
 
 const { Title } = Typography;
 
 const ChangePasswordForm = () => {
   const [form] = Form.useForm();
+  const [changePassword, { isLoading }] = usePatchNewPasswordMutation();
 
-  const onFinish = (values) => {
-    console.log("Form values:", values);
+  const onFinish = async (values) => {
+    const data = {
+      oldPassword: values.oldPassword,
+      confirmNewPassword: values.confirmNewPassword,
+      newPassword: values.newPassword,
+    };
+
+    try {
+      const result = await changePassword(data).unwrap();
+      console.log("Password changed successfully:", result);
+      message.success("Password updated successfully!");
+    } catch (error) {
+      console.error("Error changing password:", error);
+      message.error("Failed to update the password. Please try again.");
+    }
   };
 
   return (
-    <div style={{ maxWidth: "500px", margin: "0 auto", padding: "20px" }}>
+    <div >
       <Title level={4} style={{ textAlign: "center", marginBottom: "20px" }}>
         Change Password
       </Title>
@@ -22,20 +36,29 @@ const ChangePasswordForm = () => {
         onFinish={onFinish}
         form={form}
         initialValues={{
-          currentPassword: "",
+          oldPassword: "",
           newPassword: "",
           confirmNewPassword: "",
         }}
       >
         {/* Current Password */}
         <Form.Item
-          label="Current Password"
-          name="currentPassword"
+          label="Old Password"
+          name="oldPassword"
           rules={[
             { required: true, message: "Please enter your current password" },
           ]}
         >
           <Input.Password
+            style={{
+              width: "100%",
+              height: 40,
+              border: "1px solid black",
+              borderRadius: "5px",
+              color: "#111",
+              backgroundColor: "#fff",
+              outline: "none",
+            }}
             placeholder="Enter your current password"
             iconRender={(visible) =>
               visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -56,6 +79,15 @@ const ChangePasswordForm = () => {
           ]}
         >
           <Input.Password
+            style={{
+              width: "100%",
+              height: 40,
+              border: "1px solid black",
+              borderRadius: "5px",
+              color: "#111",
+              backgroundColor: "#fff",
+              outline: "none",
+            }}
             placeholder="Enter your new password"
             iconRender={(visible) =>
               visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -68,6 +100,7 @@ const ChangePasswordForm = () => {
           label="Confirm New Password"
           name="confirmNewPassword"
           dependencies={["newPassword"]}
+    
           rules={[
             { required: true, message: "Please confirm your new password" },
             ({ getFieldValue }) => ({
@@ -81,6 +114,15 @@ const ChangePasswordForm = () => {
           ]}
         >
           <Input.Password
+            style={{
+              width: "100%",
+              height: 40,
+              border: "1px solid black",
+              borderRadius: "5px",
+              color: "#111",
+              backgroundColor: "#fff",
+              outline: "none",
+            }}
             placeholder="Confirm your new password"
             iconRender={(visible) =>
               visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -91,15 +133,15 @@ const ChangePasswordForm = () => {
         {/* Save Changes Button */}
         <Form.Item>
           <Button
-            type="primary"
             htmlType="submit"
+            disabled={isLoading}
             style={{
-              width: "100%",
-              backgroundColor: "#243A5A",
-              borderColor: "#243A5A",
+              width: "200px",
+              justifyContent: "center",
             }}
+            className={`sidebar-button-orange mx-auto`}
           >
-            Save Changes
+            {isLoading ? <Spin size="small" /> : "Save Changes"}
           </Button>
         </Form.Item>
       </Form>

@@ -8,13 +8,14 @@ import {
 } from "@ant-design/icons";
 import { RiTodoLine } from "react-icons/ri";
 import { BsFillQuestionOctagonFill } from "react-icons/bs";
-import { FaEdit, FaRegBell } from "react-icons/fa";
-import { IoWalletSharp } from "react-icons/io5";
+import { FaEdit } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { CiSettings, CiLogout } from "react-icons/ci";
 import "antd/dist/reset.css";
-import AllNotification from "../components/AllNotification";
+// import AllNotification from "../components/AllNotification";
 import brandLogo from "../../assets/BrandIcon.svg";
+import { useSuperAdminProfileGetQuery } from "../../redux/services/userApis";
+import { imageUrl } from "../../utils/server";
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -68,18 +69,20 @@ function DashBoardLayOut() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { data, isLoading } = useSuperAdminProfileGetQuery({});
   const handleMenuClick = ({ key }) => {
     const selectedItem = menuItems.find((item) => item.key === key);
     if (selectedItem) {
       navigate(selectedItem.path);
     }
   };
+  console.log(data);
 
   const user = {
     login: true,
-    photoURL: "https://randomuser.me/api/portraits/men/75.jpg",
-    displayName: "Hosain Ali",
-    email: "Asadujjaman@gmail.com",
+    photoURL: imageUrl(data?.data?.profile_image),
+    displayName: data?.data?.username,
+    email: data?.data?.email,
   };
 
   const navigateToSettings = () => {
@@ -88,13 +91,15 @@ function DashBoardLayOut() {
 
   const handleSignOut = () => {
     console.log("Sign Out");
+    localStorage.removeItem("accessToken");
+    navigate("/auth/login");
   };
 
-  const notificationMenu = (
-    <div style={{ padding: "10px", width: "200px" }}>
-      <AllNotification />
-    </div>
-  );
+  // const notificationMenu = (
+  //   <div style={{ padding: "10px", width: "200px" }}>
+  //     <AllNotification />
+  //   </div>
+  // );
 
   const userMenu = (
     <div
@@ -183,7 +188,7 @@ function DashBoardLayOut() {
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center"></div>
               <div className="flex items-center gap-4">
-                {/* Notification Dropdown */}
+                {/* Notification Dropdown
                 <Dropdown
                   overlay={notificationMenu}
                   trigger={["click"]}
@@ -203,29 +208,33 @@ function DashBoardLayOut() {
                   >
                     <FaRegBell className="text-white" />
                   </div>
-                </Dropdown>
+                </Dropdown> */}
 
                 {/* User Dropdown */}
-                <Dropdown
-                  overlay={userMenu}
-                  trigger={["click"]}
-                  placement="bottomRight"
-                >
-                  <div
-                    className="flex items-center gap-2 cursor-pointer"
-                    style={{ display: "flex", alignItems: "center" }}
+                {!isLoading && (
+                  <Dropdown
+                    overlay={userMenu}
+                    trigger={["click"]}
+                    placement="bottomRight"
                   >
-                    <Avatar
-                      src={user.photoURL}
-                      size="large"
-                      style={{ backgroundColor: "#000" }}
-                    />
-                    <div className="flex items-start mt-2 gap-1">
-                      <p className="font-semibold text-sm">{user?.email}</p>
-                      <IoMdArrowDropdown />
+                    <div
+                      className="flex items-center gap-2 cursor-pointer"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <Avatar
+                        src={user.photoURL}
+                        size="large"
+                        style={{ backgroundColor: "#000" }}
+                      />
+                      <div className="flex items-start mt-2 gap-1">
+                        <p className="font-semibold text-sm">
+                          {user?.displayName}
+                        </p>
+                        <IoMdArrowDropdown />
+                      </div>
                     </div>
-                  </div>
-                </Dropdown>
+                  </Dropdown>
+                )}
               </div>
             </div>
           </Title>
