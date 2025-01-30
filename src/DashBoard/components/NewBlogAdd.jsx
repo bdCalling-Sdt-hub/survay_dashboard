@@ -1,15 +1,17 @@
-/* eslint-disable react/prop-types */
-import React, { useMemo, useState } from "react";
-import { Button, Input, Upload } from "antd";
+import { useMemo, useState } from "react";
+import { Button, Form, Input, Upload, message, Card } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import JoditEditor from "jodit-react";
+import { usePostNewBlogMutation } from "../../redux/services/blogApis";
 
 function NewBlogAdd({ setShowEditBlogModal }) {
+  const [newBlogPost, { isLoading }] = usePostNewBlogMutation();
+  const [form] = Form.useForm();
   const [blogData, setBlogData] = useState({
     title: "",
-    category: "",
-    image: "",
-    content: "",
+    hashtag: "",
+    blog_image: null,
+    description: "",
   });
 
   const handleInputChange = (key, value) => {
@@ -22,113 +24,111 @@ function NewBlogAdd({ setShowEditBlogModal }) {
   const handleImageUpload = ({ file }) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      handleInputChange("image", e.target.result);
+      handleInputChange("blog_image", file);
     };
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = () => {
-    if (!blogData.title || !blogData.category || !blogData.content) {
-      alert("Please fill out all fields.");
-      return;
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("hashtag", values.hashtag);
+      formData.append("description", blogData.description);
+      if (blogData.blog_image) {
+        formData.append("blog_image", blogData.blog_image);
+      }
+
+      await newBlogPost(formData);
+      message.success("Blog added successfully!");
+      setShowEditBlogModal(false);
+    } catch (error) {
+      message.error("Please fill out all fields correctly.");
     }
-    console.log("Blog data submitted:", blogData);
-    setShowEditBlogModal(false);
   };
-  const blogConntent = useMemo(() => {
+
+  const contentText = useMemo(() => {
     return (
       <JoditEditor
-        value={blogData.content}
-        onBlur={(newContent) => handleInputChange("content", newContent)}
-        config={{
-          readonly: false,
-          toolbarSticky: false,
-          height: 500,
-          width: "100%",
-        }}
+        value={blogData.description}
+        onBlur={(newContent) => handleInputChange("description", newContent)}
+        config={{ readonly: false, height: 300 }}
       />
     );
   }, []);
-
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-      <div className="flex w-full flex-col gap-6 items-start">
+    <Card title="Add New Blog" bordered={false} className="w-full mx-auto mt-6">
+      <Form requiredMark={false} form={form} layout="vertical">
         {/* Blog Title */}
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
+        <Form.Item
+          label="Blog Title"
+          name="title"
+          rules={[{ required: true, message: "Please enter the blog title" }]}
         >
-          Blog Title
-        </label>
-        <Input
-          id="title"
-          value={blogData.title}
-          onChange={(e) => handleInputChange("title", e.target.value)}
-          placeholder="Enter the title of your blog"
-        />
+          <Input
+            placeholder="Enter blog title"
+            onChange={(e) => handleInputChange("title", e.target.value)}
+          />
+        </Form.Item>
 
-        {/* Blog Category */}
-        <label
-          htmlFor="category"
-          className="block text-sm font-medium text-gray-700"
+        {/* Blog Hashtag */}
+        <Form.Item
+          label="Blog Hashtag"
+          name="hashtag"
+          rules={[{ required: true, message: "Please enter a hashtag" }]}
         >
-          Blog Hashtag
-        </label>
-        <Input
-          id="category"
-          value={blogData.category}
-          onChange={(e) => handleInputChange("category", e.target.value)}
-          placeholder="Enter the category of your blog (e.g., Technology, Health)"
-        />
+          <Input
+            placeholder="Enter blog hashtag"
+            onChange={(e) => handleInputChange("hashtag", e.target.value)}
+          />
+        </Form.Item>
 
         {/* Image Upload */}
-        <div className="flex flex-col gap-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Blog Image
-          </label>
-          {blogData.image && (
-            <img
-              src={blogData.image}
-              alt="Preview"
-              className="w-[400px] h-[300px] object-cover rounded-md"
-            />
-          )}
+        <Form.Item
+          label="Blog Image"
+          name="blog_image"
+          rules={[{ required: true, message: "Please upload an image" }]}
+        >
           <Upload
             beforeUpload={() => false}
-            onChange={handleImageUpload}
             showUploadList={false}
+            onChange={handleImageUpload}
           >
-            <Button icon={<UploadOutlined />}>Upload New Image</Button>
+            <Button icon={<UploadOutlined />}>Upload Image</Button>
           </Upload>
-        </div>
+          {blogData.blog_image && (
+            <img
+              src={URL.createObjectURL(blogData.blog_image)}
+              alt="Preview"
+              className="mt-2 w-full max-h-60 object-cover rounded-md"
+            />
+          )}
+        </Form.Item>
 
-        {/* Blog Content Editor */}
-        <label
-          htmlFor="content"
-          className="block w-full text-sm font-medium text-gray-700"
+        {/* Blog Description */}
+        <Form.Item
+          label="Blog Description"
+          name="description"
+          rules={[{ required: true, message: "Please enter a description" }]}
         >
-          Blog Content
-        </label>
+          {contentText}
+        </Form.Item>
 
-        <div className="w-full">{blogConntent}</div>
-        {/* Save and Cancel Buttons */}
-        <div className="flex gap-4 mt-4">
+        {/* Submit and Cancel Buttons */}
+        <Form.Item>
           <Button
-            className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-2 rounded-md"
             type="primary"
             onClick={handleSubmit}
+            loading={isLoading}
+            className="mr-2"
           >
             Add Blog
           </Button>
-          <Button
-            className="bg-gray-300 hover:bg-gray-400 text-black px-6 py-2 rounded-md"
-            onClick={() => setShowEditBlogModal(false)}
-          >
-            Cancel
-          </Button>
-        </div>
-      </div>
-    </div>
+          <Button onClick={() => setShowEditBlogModal(false)}>Cancel</Button>
+        </Form.Item>
+      </Form>
+    </Card>
   );
 }
 

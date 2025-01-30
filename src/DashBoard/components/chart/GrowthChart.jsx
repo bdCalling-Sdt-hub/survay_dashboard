@@ -6,11 +6,28 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
-import { useMemo } from "react";
-import dayjs from "dayjs";
+import { useEffect, useMemo, useState } from "react";
+import { Select } from "antd";
+import { useGetOverViewsQuery } from "../../../redux/services/metaApis";
 
-const GrowthChart = ({ userData, isLoading }) => {
+const GrowthChart = () => {
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
+  const [years, setYears] = useState([]);
+
+  useEffect(() => {
+    const startYear = 2024;
+    const yearsArray = Array.from(
+      { length: currentYear - startYear + 1 },
+      (_, index) => startYear + index
+    );
+    setYears(yearsArray);
+  }, [currentYear]);
+
+  const { data, isLoading } = useGetOverViewsQuery(year);
+
   const { monthlyData, maxUsers } = useMemo(() => {
     const monthMap = {
       Jan: 0,
@@ -27,11 +44,10 @@ const GrowthChart = ({ userData, isLoading }) => {
       Dec: 0,
     };
 
-    if (!isLoading && userData?.data?.result) {
-      userData?.data?.result.forEach((user) => {
-        const month = dayjs(user.createdAt).format("MMM");
-        if (monthMap[month] !== undefined) {
-          monthMap[month] += 1;
+    if (!isLoading && data?.data) {
+      data.data.forEach(({ month, totalUser }) => {
+        if (month in monthMap) {
+          monthMap[month] = totalUser;
         }
       });
     }
@@ -41,45 +57,82 @@ const GrowthChart = ({ userData, isLoading }) => {
     return {
       monthlyData: Object.keys(monthMap).map((month) => ({
         name: month,
-        uv: monthMap[month],
+        totalUser: monthMap[month],
       })),
       maxUsers,
     };
-  }, [userData, isLoading]);
+  }, [data, isLoading, year]);
 
   return (
     <div
       style={{
         width: "100%",
-        height: "300px",
-        backgroundColor: "#f7fbff",
-        borderRadius: "10px",
-        padding: "10px",
+        height: "350px",
+        backgroundColor: "#fff",
+        borderRadius: "12px",
+        padding: "20px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
       }}
     >
       <h3
         style={{
           textAlign: "left",
-          marginBottom: "20px",
+          marginBottom: "15px",
           color: "#333",
           fontWeight: "bold",
+          fontSize: "18px",
         }}
       >
-        User Growth
+        📈 User Growth Chart
       </h3>
-      <ResponsiveContainer width="100%" height="100%">
+      <Select
+        className="min-w-32"
+        value={year}
+        placeholder="Select year"
+        onChange={setYear}
+        style={{
+          marginBottom: "15px",
+          width: "150px",
+          fontWeight: "500",
+        }}
+        options={years.map((item) => ({ value: item, label: item }))}
+      />
+      <ResponsiveContainer width="100%" height="85%">
         <BarChart
           data={monthlyData}
-          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+          margin={{ top: 20, right: 20, left: 0, bottom: 10 }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#b3e5fc" />
-          <XAxis dataKey="name" stroke="#333" />
-          <YAxis stroke="#333" domain={[0, maxUsers]} />
-          <Tooltip />
+          <defs>
+            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#1DB7F2" stopOpacity={0.9} />
+              <stop offset="95%" stopColor="#1DB7F2" stopOpacity={0.3} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+          <XAxis
+            dataKey="name"
+            stroke="#333"
+            tick={{ fontSize: 12, fontWeight: 500 }}
+          />
+          <YAxis
+            stroke="#333"
+            domain={[0, maxUsers]}
+            tick={{ fontSize: 12, fontWeight: 500 }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#fff",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              padding: "8px",
+            }}
+            cursor={{ fill: "rgba(76, 175, 80, 0.1)" }}
+          />
+          <Legend wrapperStyle={{ fontSize: "13px", fontWeight: "bold" }} />
           <Bar
-            dataKey="uv"
-            fill="#29b6f6"
-            barSize={50}
+            dataKey="totalUser"
+            fill="url(#colorUv)"
+            barSize={45}
             radius={[10, 10, 0, 0]}
           />
         </BarChart>

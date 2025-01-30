@@ -13,7 +13,15 @@ const baseApis = createApi({
       return headers;
     },
   }),
-  tagTypes: ["profile", "user","overView"],
+  tagTypes: [
+    "profile",
+    "user",
+    "overView",
+    "blog",
+    "story",
+    "why",
+    "personal-why",
+  ],
   endpoints: () => ({}),
 });
 

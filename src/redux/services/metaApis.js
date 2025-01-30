@@ -6,7 +6,7 @@ export const metaApis = baseApis.injectEndpoints({
       query: (year) => ({
         url: "/meta/user-chart-data",
         method: "GET",
-        params: year,
+        params: { year },
       }),
       providesTags: ["overView"],
     }),

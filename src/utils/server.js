@@ -8,3 +8,7 @@ export const imageUrl = (image) => {
       : `${url}/${image}`
     : `https://placehold.co/400`;
 };
+
+export const stripHtmlTags = (html) => {
+  return html.replace(/<\/?[^>]+(>|$)/g, "");
+};

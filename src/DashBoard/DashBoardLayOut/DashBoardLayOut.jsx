@@ -76,7 +76,6 @@ function DashBoardLayOut() {
       navigate(selectedItem.path);
     }
   };
-  console.log(data);
 
   const user = {
     login: true,
