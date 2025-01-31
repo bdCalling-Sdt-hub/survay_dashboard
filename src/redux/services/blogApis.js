@@ -34,14 +34,11 @@ export const blogApis = baseApis.injectEndpoints({
       invalidatesTags: ["blog"],
     }),
     updateBlog: builder.mutation({
-      query: ({ id, data }) => (
-        console.log(id),
-        {
-          url: `/blog/update-blog/${id}`,
-          method: "PATCH",
-          body: data,
-        }
-      ),
+      query: ({ id, data }) => ({
+        url: `/blog/update-blog/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
       invalidatesTags: ["blog"],
     }),
   }),

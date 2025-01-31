@@ -10,11 +10,24 @@ function BlogCustomize({ selectedBlog, onDeleteBlog }) {
   const [isEditing, setIsEditing] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [editedBlog, setEditedBlog] = useState(null);
+  const [fileList, setFileList] = useState([]);
   const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
 
   useEffect(() => {
     if (selectedBlog) {
       setEditedBlog({ ...selectedBlog });
+      setFileList(
+        selectedBlog.blog_image
+          ? [
+              {
+                uid: "-1",
+                name: "blog_image.jpg",
+                status: "done",
+                url: imageUrl(selectedBlog.blog_image),
+              },
+            ]
+          : []
+      );
     }
   }, [selectedBlog]);
 
@@ -22,53 +35,30 @@ function BlogCustomize({ selectedBlog, onDeleteBlog }) {
     setEditedBlog((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleImageUpload = async (info) => {
-    setImageLoading(true);
-    const uploadedImage = info.file.originFileObj || info.file;
-
-    if (!(uploadedImage instanceof File)) {
-      message.error("Invalid file type. Please upload a valid image.");
-      setImageLoading(false);
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", uploadedImage);
-
-    try {
-      const response = await fetch("https://your-api.com/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result?.imageUrl) {
-        setEditedBlog((prev) => ({ ...prev, blog_image: result.imageUrl }));
-        message.success("Image uploaded successfully!");
-      } else {
-        throw new Error(result?.message || "Upload failed");
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      message.error("Image upload failed. Please try again.");
-    } finally {
-      setImageLoading(false);
-    }
+  const handleImageUpload = ({ fileList }) => {
+    setFileList(fileList);
   };
 
   const handleEditSubmit = async () => {
     if (!editedBlog) return;
-    console.log(editedBlog);
 
     try {
-      const updateData = {
-        blog_image: editedBlog.blog_image,
-        description: editedBlog.description,
-        hashtag: editedBlog.hashtag,
-        title: editedBlog.title,
-      };
-      await updateBlog({ id: editedBlog._id, data: updateData }).unwrap();
+      const formData = new FormData();
+      formData.append(
+        "data",
+        JSON.stringify({
+          title: editedBlog.title,
+          hashtag: editedBlog.hashtag,
+          description: editedBlog.description,
+        })
+      );
+
+      if (fileList.length > 0) {
+        formData.append("blog_image", fileList[0].originFileObj);
+      }
+
+      await updateBlog({ id: editedBlog._id, data: formData }).unwrap();
+
       message.success("Blog updated successfully!");
       setIsEditing(false);
     } catch (error) {
@@ -109,13 +99,19 @@ function BlogCustomize({ selectedBlog, onDeleteBlog }) {
           <div className="flex flex-col gap-2">
             <p>Current Image:</p>
             <UsernameImage
-              imageSrc={imageUrl(editedBlog?.blog_image)}
+              imageSrc={
+                fileList.length > 0
+                  ? fileList[0].url
+                  : imageUrl(editedBlog.blog_image)
+              }
               name={editedBlog?.title}
             />
             <Upload
               beforeUpload={() => false}
               onChange={handleImageUpload}
-              showUploadList={false}
+              fileList={fileList}
+              showUploadList={true}
+              listType="picture"
             >
               <Button icon={<UploadOutlined />} loading={imageLoading}>
                 {imageLoading ? "Uploading..." : "Upload New Image"}
@@ -171,18 +167,16 @@ function BlogCustomize({ selectedBlog, onDeleteBlog }) {
             {stripHtmlTags(editedBlog.description) || "N/A"}
           </p>
           <div className="flex justify-end mt-4 gap-2">
-            <div className="flex gap-2">
-              <Button type="default" onClick={() => setIsEditing(true)}>
-                Edit Blog
-              </Button>
-              <Button
-                type="primary"
-                danger
-                onClick={() => onDeleteBlog(editedBlog._id)}
-              >
-                Delete Blog
-              </Button>
-            </div>
+            <Button type="default" onClick={() => setIsEditing(true)}>
+              Edit Blog
+            </Button>
+            <Button
+              type="primary"
+              danger
+              onClick={() => onDeleteBlog(editedBlog._id)}
+            >
+              Delete Blog
+            </Button>
           </div>
         </div>
       )}
@@ -191,3 +185,110 @@ function BlogCustomize({ selectedBlog, onDeleteBlog }) {
 }
 
 export default BlogCustomize;
+// import { Form, Input, Upload, Button, message, Spin } from "antd";
+// import { FaImage } from "react-icons/fa";
+// import { LoadingOutlined } from "@ant-design/icons";
+// import { useState } from "react";
+// import { useUpdateBlogMutation } from "../../redux/services/blogApis";
+
+// const BlogCustomize = ({ closeModal }) => {
+//   const [form] = Form.useForm();
+//   const [updateData, { isLoading: updating }] = useUpdateBlogMutation();
+//   const [file, setFile] = useState(null);
+//   const [fileList, setFileList] = useState([]);
+
+//   const handleFileChange = ({ fileList }) => {
+//     setFileList(fileList);
+//     setFile(fileList.length ? fileList[0].originFileObj : null);
+//   };
+
+//   const onFinish = async (values) => {
+//     if (!file) {
+//       message.error("Please upload a category image");
+//       return;
+//     }
+
+//     const formData = new FormData();
+//     formData.append("name", values.name);
+//     formData.append("category_image", file);
+
+//     try {
+//       await updateData(formData).unwrap();
+//       form.resetFields();
+//       setFile(null);
+//       setFileList([]);
+//       message.success("Category added successfully");
+//       closeModal();
+//     } catch (error) {
+//       message.error("Failed to add category. Please try again.");
+//     }
+//   };
+
+//   return (
+//     <Form
+//       form={form}
+//       layout="vertical"
+//       onFinish={onFinish}
+//       className="bg-[var(--black-200)] p-3 rounded-md"
+//     >
+//       <p className="text-xl text-[var(--white-600)] text-center">
+//         Add New Category
+//       </p>
+
+//       <Form.Item
+//         label={<span className="text-[var(--white-600)]">Category Name</span>}
+//         name="name"
+//         rules={[{ required: true, message: "Please input category name" }]}
+//       >
+//         <Input className="bg-[var(--black-600)] p-2 w-full outline-none focus:bg-[var(--black-700)] hover:bg-[var(--black-700)] border-none h-11 text-[var(--white-600)]" />
+//       </Form.Item>
+
+//       <Form.Item
+//         label={<span className="text-[var(--white-600)]">Category Image</span>}
+//         rules={[{ required: true, message: "Please upload a category image" }]}
+//       >
+//         <Upload
+//           beforeUpload={() => false}
+//           onChange={handleFileChange}
+//           listType="picture-card"
+//           maxCount={1}
+//           accept="image/*"
+//           fileList={fileList}
+//         >
+//           <div className="center-center flex-col">
+//             <FaImage className="text-[var(--white-600)]" />
+//             <p className="text-[var(--white-600)]">Upload Image</p>
+//           </div>
+//         </Upload>
+//       </Form.Item>
+
+//       <div className="center-center mt-10 flex justify-between">
+//         <Button
+//           onClick={() => {
+//             closeModal();
+//             form.resetFields();
+//             setFile(null);
+//             setFileList([]);
+//           }}
+//           className="border border-[var(--gray-600)] text-[var(--orange-600)]"
+//         >
+//           Cancel
+//         </Button>
+//         <Button
+//           type="primary"
+//           htmlType="submit"
+//           loading={updating}
+//           className="bg-[var(--orange-600)] border-none text-[var(--white-600)]"
+//         >
+//           {updating ? (
+//             <Spin indicator={<LoadingOutlined spin />} size="small" />
+//           ) : (
+//             "Update"
+//           )}
+//         </Button>
+//       </div>
+//     </Form>
+//   );
+// };
+
+// export default BlogCustomize;

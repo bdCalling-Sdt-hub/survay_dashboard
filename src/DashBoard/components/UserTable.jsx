@@ -1,18 +1,18 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Table, Input, Modal, Button, Spin } from "antd";
 import { MdBlock, MdMessage } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { GrAnnounce } from "react-icons/gr";
-import TextArea from "antd/es/input/TextArea";
 import {
   useGetNormalUserQuery,
   useUpdateStatusMutation,
 } from "../../redux/services/userApis";
 import { imageUrl } from "../../utils/server";
 import toast from "react-hot-toast";
+import JoditEditor from "jodit-react";
 
 const UserTable = () => {
   const [page, setPage] = useState(1);
@@ -20,10 +20,10 @@ const UserTable = () => {
   const [sortedInfo, setSortedInfo] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [announce, setAnnounce] = useState(false);
   const { data, isLoading, refetch } = useGetNormalUserQuery();
   const [updateStatus, { isLoading: isUpdating }] = useUpdateStatusMutation();
-
+  const [announcementTitle, setAnnouncementTitle] = useState("");
+  const [announcementMessage, setAnnouncementMessage] = useState("");
   const handleSearch = (e) => {
     setSearchText(e.target.value.toLowerCase());
   };
@@ -82,18 +82,6 @@ const UserTable = () => {
   const handleCloseModal = () => {
     setIsModalVisible(false);
     setSelectedUser(null);
-  };
-  const handleCloseAnnounceModal = () => {
-    setAnnounce(false);
-  };
-
-  const handleCancel = () => {
-    setAnnounce(false);
-  };
-
-  const handleSend = () => {
-    console.log("Announcement Sent");
-    setAnnounce(false);
   };
 
   const columns = [
@@ -181,25 +169,57 @@ const UserTable = () => {
   const dataSource = data?.data?.result?.map((item, i) => ({
     key: item?._id,
     slNo: i + 1,
-    name: item?.name,
-    profileImage: item?.profile_image,
-    email: item?.email,
-    address: `${item?.city}, ${item?.country}`,
+    name: item?.name || "N/A",
+    profileImage: item?.profile_image || "N/A",
+    email: item?.email || "N/A",
+    address: `${item?.city || "N/A"}, ${item?.country || "N/A"}`,
     status: item?.user?.status || "N/A",
     id: item?.user?._id || "N/A",
     createdAt: new Date(item?.createdAt).toLocaleDateString() || "N/A",
-    phone: item?.phone,
-    city: item?.city,
-    country: item?.country,
-    profession: item?.profession,
-    dob: item?.dateOfBirth,
-    education: item?.education,
+    phone: item?.phone || "N/A",
+    city: item?.city || "N/A",
+    country: item?.country || "N/A",
+    profession: item?.profession || "N/A",
+    dob: item?.dateOfBirth || "N/A",
+    education: item?.education || "N/A",
   }));
 
   const filteredData = dataSource?.filter((item) =>
     item?.name.toLowerCase().includes(searchText)
   );
-  console.log(selectedUser);
+
+  const [announce, setAnnounce] = useState(false);
+
+  const content = useMemo(() => {
+    return (
+      <JoditEditor
+        value={announcementMessage}
+        onBlur={(newContent) => {
+          console.log("Editor Content Updated:", newContent);
+          setAnnouncementMessage(newContent);
+        }}
+        config={{
+          readonly: false,
+          toolbarSticky: false,
+          height: 500,
+          width: "100%",
+        }}
+      />
+    );
+  }, [announcementMessage]);
+
+  const handleSend = () => {
+    console.log("Announcement Sent:", {
+      title: announcementTitle,
+      message: announcementMessage,
+    });
+    setAnnounce(false);
+  };
+
+  const handleCloseAnnounceModal = () => {
+    console.log("Modal Closed");
+    setAnnounce(false);
+  };
 
   return (
     <div>
@@ -228,14 +248,14 @@ const UserTable = () => {
         }}
         onChange={handleChange}
       />
-
       {/* User Details Modal */}
       <Modal
+        width={1200}
         title={null}
         open={isModalVisible}
         onCancel={handleCloseModal}
         footer={null}
-        className="user-modal md:min-w-[800px]"
+        className="user-modal"
       >
         {selectedUser && (
           <div className="p-4">
@@ -328,7 +348,6 @@ const UserTable = () => {
           </div>
         )}
       </Modal>
-
       <Modal
         title="Send an Announcement to Users"
         open={announce}
@@ -344,21 +363,23 @@ const UserTable = () => {
           <Input
             placeholder='"Upcoming Maintenance Notification"'
             className="w-full"
+            value={announcementTitle}
+            onChange={(e) => {
+              console.log("Title Updated:", e.target.value);
+              setAnnouncementTitle(e.target.value);
+            }}
           />
         </div>
 
         {/* Message */}
         <div className="mb-4">
           <label className="block font-semibold mb-1">Message:</label>
-          <TextArea
-            rows={4}
-            placeholder='"Dear Users, we will be performing a scheduled system maintenance on [Date] from [Start Time] to [End Time]. During this time, the site may be temporarily unavailable. We apologize for any inconvenience caused. Thank you for your understanding."'
-          />
+          <div className="w-full">{content}</div>
         </div>
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-4">
-          <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleCloseAnnounceModal}>Cancel</Button>
           <Button type="primary" onClick={handleSend}>
             Send
           </Button>

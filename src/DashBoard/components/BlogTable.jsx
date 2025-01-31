@@ -161,6 +161,7 @@ const BlogTable = () => {
           width={1200}
         >
           <BlogCustomize
+            setSelectedBlog={setSelectedBlog}
             setShowBlogModal={setShowBlogModal}
             showBlogModal={showBlogModal}
             selectedBlog={selectedBlog}

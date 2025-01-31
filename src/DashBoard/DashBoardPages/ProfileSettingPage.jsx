@@ -63,7 +63,7 @@ const Profile = () => {
           </div>
         </div>
         <p className="text-2xl text-center text- mt-2">
-          {data?.data?.authId?.name || "User Name"}
+          {data?.data?.name || "User Name"}
         </p>
       </div>
 

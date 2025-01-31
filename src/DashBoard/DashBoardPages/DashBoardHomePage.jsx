@@ -1,5 +1,5 @@
 import GrowthChart from "../components/chart/GrowthChart";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 import { Link } from "react-router-dom";
 import storyIcon from "../../assets/storyIcon.svg";
 import userIcon from "../../assets/userIcon.svg";
@@ -20,8 +20,14 @@ function DashBoardHomePage() {
     useGetAllMetaDataQuery();
 
   if (overViewDataLoading || isMetaDataLoading) {
-    return <p>..loading</p>;
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <Spin size="small" />
+      </div>
+    );
   }
+  console.log(overViewData);
+
   const { totalUser, totalStory, totalWhy, totalBlog } = metaData.data;
 
   const data = [
