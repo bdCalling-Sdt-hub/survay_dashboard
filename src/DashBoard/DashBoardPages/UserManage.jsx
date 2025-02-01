@@ -26,7 +26,7 @@ function UserManage() {
 
   return (
     <div>
-      <div className="flex items-center mb-12 justify-between w-full p-2 rounded-md bg-[#d6f4ff]">
+      <div className="flex pt-4 items-center mb-12 justify-between w-full p-2 rounded-md bg-[#d6f4ff]">
         <h1 className="font-bold text-xl">User Management</h1>
         <CSVLink
           data={csvData}

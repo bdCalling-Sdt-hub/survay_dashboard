@@ -22,7 +22,7 @@ const StoryTable = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 300);
+    }, 200);
 
     return () => clearTimeout(handler);
   }, [searchTerm]);

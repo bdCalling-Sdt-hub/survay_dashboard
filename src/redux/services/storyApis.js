@@ -5,7 +5,6 @@ export const storyApis = baseApis.injectEndpoints({
     getAllStory: builder.query({
       query: ({ searchTerm, status }) => {
         const params = { searchTerm, status };
-        console.log(searchTerm);
         return {
           url: "/story/all-story",
           method: "GET",

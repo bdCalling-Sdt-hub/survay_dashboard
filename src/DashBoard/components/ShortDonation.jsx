@@ -1,35 +1,46 @@
 import { useState } from "react";
-import { Table } from "antd";
+import { Table, Spin, Alert, Image } from "antd";
+import { useGetNormalUserQuery } from "../../redux/services/userApis";
 
 const ShortDonation = () => {
   const [sortedInfo, setSortedInfo] = useState({});
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
-  const handleChange = (_, __, sorter) => {
+  const { data, isLoading, isError, error } = useGetNormalUserQuery({
+    page: pagination.current,
+    limit: pagination.pageSize,
+  });
+
+  const handleChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter);
+    setPagination(pagination);
   };
 
   const columns = [
     {
       title: "SL No",
-      width: 100,
+      width: 50,
       dataIndex: "slNo",
       key: "slNo",
       fixed: "left",
     },
     {
       title: "User Info",
-      width: 200,
+      width: 100,
       dataIndex: "userInfo",
       key: "userInfo",
       fixed: "left",
       render: (_, record) => (
         <div className="flex items-center gap-3">
-          <img
-            src={record.userImage}
+          <Image
+            src={record.profileImage || "https://via.placeholder.com/40"}
             alt="User"
-            className="w-10 h-10 rounded-full"
+            width={40}
+            height={40}
+            style={{ borderRadius: "50%" }}
+            preview={false}
           />
-          <span>{record.userName}</span>
+          <span>{record.name}</span>
         </div>
       ),
     },
@@ -44,46 +55,77 @@ const ShortDonation = () => {
       dataIndex: "address",
       key: "address",
       width: 150,
+      render: (_, record) =>
+        `${record.city || "N/A"}, ${record.country || "N/A"}`,
     },
     {
       title: "Signup Date",
-      dataIndex: "completionDate",
-      key: "completionDate",
+      dataIndex: "createdAt",
+      key: "createdAt",
       width: 150,
-      sorter: (a, b) => new Date(a.completionDate) - new Date(b.completionDate),
-      sortOrder:
-        sortedInfo.columnKey === "completionDate" ? sortedInfo.order : null,
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      sortOrder: sortedInfo.columnKey === "createdAt" ? sortedInfo.order : null,
+      render: (date) => new Date(date).toLocaleDateString(),
     },
     {
-      title: "WHY Status",
+      title: "Status",
       dataIndex: "status",
       key: "status",
       width: 150,
+      render: (_, record) => record.user?.status || "N/A",
     },
   ];
 
-  const dataSource = Array.from({ length: 10 }).map((_, i) => ({
-    key: i,
+  const dataSource = data?.data?.result?.map((item, i) => ({
+    key: item?._id,
     slNo: i + 1,
-    userName: `User ${i + 1}`,
-    userImage: `https://i.pravatar.cc/150?img=${i + 1}`,
-    email: `user${i + 1}@example.com`,
-    address: "123 Street, Dhaka",
-    phone: `123-456-${i.toString().padStart(4, "0")}`,
-    status: "yes",
-    completionDate: `2025-01-${(i % 31) + 1} 12:${i % 60}:00`,
+    name: item?.name || "N/A",
+    profileImage: item?.profile_image,
+    email: item?.email || "N/A",
+    city: item?.city || "N/A",
+    country: item?.country || "N/A",
+    user: item?.user || {},
+    createdAt: item?.createdAt || "N/A",
   }));
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Alert
+          message="Error"
+          description={error?.data?.message || "Failed to fetch data"}
+          type="error"
+          showIcon
+        />
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="p-4">
       <Table
         columns={columns}
         dataSource={dataSource}
-        pagination={false}
-        scroll={{
-          x: 1500,
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: data?.data?.meta?.total || 0,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "50", "100"],
+          onChange: (page, pageSize) =>
+            setPagination({ current: page, pageSize }),
         }}
+        scroll={{ x: 1200 }}
         onChange={handleChange}
+        loading={isLoading}
       />
     </div>
   );

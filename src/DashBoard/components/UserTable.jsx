@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Table, Input, Modal, Button, Spin } from "antd";
 import { MdBlock, MdMessage } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -14,18 +14,31 @@ import { imageUrl } from "../../utils/server";
 import toast from "react-hot-toast";
 import JoditEditor from "jodit-react";
 
+const debounce = (func, delay) => {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => func.apply(this, args), delay);
+  };
+};
+
 const UserTable = () => {
   const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const [sortedInfo, setSortedInfo] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const { data, isLoading, refetch } = useGetNormalUserQuery();
+  const { data, isLoading } = useGetNormalUserQuery({ searchTerm: searchText });
   const [updateStatus, { isLoading: isUpdating }] = useUpdateStatusMutation();
   const [announcementTitle, setAnnouncementTitle] = useState("");
   const [announcementMessage, setAnnouncementMessage] = useState("");
+
+  const debouncedSearch = debounce((value) => {
+    setSearchText(value.toLowerCase());
+  }, 200);
+
   const handleSearch = (e) => {
-    setSearchText(e.target.value.toLowerCase());
+    debouncedSearch(e.target.value);
   };
 
   const handleChange = (_, __, sorter) => {
@@ -184,10 +197,6 @@ const UserTable = () => {
     education: item?.education || "N/A",
   }));
 
-  const filteredData = dataSource?.filter((item) =>
-    item?.name.toLowerCase().includes(searchText)
-  );
-
   const [announce, setAnnounce] = useState(false);
 
   const content = useMemo(() => {
@@ -195,7 +204,6 @@ const UserTable = () => {
       <JoditEditor
         value={announcementMessage}
         onBlur={(newContent) => {
-          console.log("Editor Content Updated:", newContent);
           setAnnouncementMessage(newContent);
         }}
         config={{
@@ -239,7 +247,7 @@ const UserTable = () => {
       <Table
         loading={isLoading}
         columns={columns}
-        dataSource={filteredData}
+        dataSource={dataSource}
         pagination={{
           pageSize: data?.data?.meta?.limit || 10,
           total: data?.data?.meta?.total || 0,
@@ -351,6 +359,7 @@ const UserTable = () => {
       <Modal
         title="Send an Announcement to Users"
         open={announce}
+        width={1200}
         onCancel={handleCloseAnnounceModal}
         footer={null}
         centered

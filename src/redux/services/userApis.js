@@ -10,12 +10,17 @@ export const userApis = baseApis.injectEndpoints({
       providesTags: ["profile"],
     }),
     getNormalUser: builder.query({
-      query: () => ({
-        url: `/normal-user/get-all`,
-        method: "GET",
-      }),
+      query: ({ searchTerm }) => {
+        const params = { searchTerm };
+        return {
+          url: `/normal-user/get-all`,
+          method: "GET",
+          params: params,
+        };
+      },
       providesTags: ["user"],
     }),
+
     superAdminProfileUpdate: builder.mutation({
       query: (data) => ({
         url: "/super-admin/update-profile",

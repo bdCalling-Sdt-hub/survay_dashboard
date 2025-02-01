@@ -1,302 +1,157 @@
 /* eslint-disable react/prop-types */
-import { Button, Input, Upload, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { useState, useEffect, useMemo } from "react";
 import JoditEditor from "jodit-react";
-import { useState, useEffect, useRef } from "react";
 import { imageUrl } from "../../utils/server";
+import { useUpdateBlogMutation } from "../../redux/services/blogApis";
+import { Form, Input, Button, Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
-function BlogEdit({ selectedBlog, setShowEditBlogModal }) {
-  const editorRef = useRef(null);
-
+function BlogEdit({ selectedBlog }) {
   const [editedBlog, setEditedBlog] = useState({
-    blogDate: "",
-    blogDescription: "",
-    blogHash: "",
-    blogId: "",
-    blogImage: "",
-    blogTitle: "",
+    id: "",
+    title: "",
+    hashtag: "",
+    description: "",
+    blog_image: "",
   });
-
-  const [fileList, setFileList] = useState([]); // Manage file state properly
-  console.log(selectedBlog);
+  const [imagePreview, setImagePreview] = useState("");
+  const [updateBlog] = useUpdateBlogMutation();
+  const [form] = Form.useForm();
+  const [image, setImage] = useState(null);
+  const handleChange = (info) => {
+    if (info.file) {
+      const file = info.fileList[0].originFileObj;
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   useEffect(() => {
     if (selectedBlog) {
-      setEditedBlog({ ...selectedBlog });
+      setEditedBlog({
+        id: selectedBlog?._id,
+        title: selectedBlog?.title,
+        hashtag: selectedBlog?.hashtag,
+        description: selectedBlog?.description,
+        blog_image: selectedBlog?.blog_image,
+      });
 
-      // If an image exists, set it as a file list
-      if (selectedBlog.blogImage) {
-        setFileList([
-          {
-            uid: "-1",
-            name: "Current Image",
-            status: "done",
-            url: imageUrl(selectedBlog.blogImage),
-          },
-        ]);
-      } else {
-        setFileList([]);
+      setImagePreview(selectedBlog?.blog_image);
+      form.setFieldsValue({
+        title: selectedBlog?.title,
+        hashtag: selectedBlog?.hashtag,
+        description: selectedBlog?.description,
+      });
+    }
+  }, [selectedBlog, form]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedBlog((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (values) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("hashtag", values.hashtag);
+      formData.append("description", values.description);
+      if (image) {
+        formData.append("blog_image", image);
       }
+
+      await updateBlog({ id: editedBlog.id, data: formData }).unwrap();
+      message.success("Blog updated successfully!");
+    } catch (error) {
+      console.error("Update error:", error?.data?.message);
+      message.error("Failed to update blog.",error?.data?.message);
     }
-  }, [selectedBlog]);
-
-  const handleInputChange = (key, value) => {
-    setEditedBlog((prev) => ({ ...prev, [key]: value }));
   };
+  const content = useMemo(() => {
+    return (
+      <JoditEditor
+        value={editedBlog?.description}
+        onBlur={(newContent) =>
+          setEditedBlog((prev) => ({ ...prev, description: newContent }))
+        }
+        config={{
+          readonly: false,
+          toolbarSticky: false,
+          height: 300,
+        }}
+      />
+    );
+  }, []);
 
-  const handleImageUpload = ({ file, fileList }) => {
-    // Only keep the latest uploaded file
-    setFileList(fileList.slice(-1));
-
-    // Convert image to base64 for preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      setEditedBlog((prev) => ({ ...prev, blogImage: reader.result }));
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleEditSubmit = () => {
-    if (!editedBlog.blogTitle || !editedBlog.blogDescription) {
-      message.error("Please fill in all required fields.");
-      return;
-    }
-
-    console.log("Updated Blog Data:", editedBlog);
-    message.success("Blog updated successfully!");
-    // Submit logic here
-  };
-
-  if (!editedBlog.blogTitle) {
-    return <div>Loading...</div>;
-  }
+  const profileImage = image
+    ? URL.createObjectURL(image)
+    : selectedBlog?.blog_image
+    ? imageUrl(selectedBlog?.blog_image)
+    : "/path/to/default-image.jpg";
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-      <div className="flex flex-col gap-6 items-start">
-        {/* Blog Title */}
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">Edit Blog</h1>
+
+      <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <Form.Item
+          label="Title"
+          name="title"
+          rules={[{ required: true, message: "Please input the blog title!" }]}
         >
-          Blog Title
-        </label>
-        <Input
-          id="title"
-          value={editedBlog.blogTitle}
-          onChange={(e) => handleInputChange("blogTitle", e.target.value)}
-          placeholder="Enter the title of your blog"
-        />
+          <Input placeholder="Enter blog title" onChange={handleInputChange} />
+        </Form.Item>
 
-        {/* Blog Hashtag */}
-        <label
-          htmlFor="blogHash"
-          className="block text-sm font-medium text-gray-700"
+        <Form.Item
+          label="Hashtag"
+          name="hashtag"
+          rules={[
+            { required: true, message: "Please input the blog hashtag!" },
+          ]}
         >
-          Blog Hashtag
-        </label>
-        <Input
-          id="blogHash"
-          value={editedBlog.blogHash}
-          onChange={(e) => handleInputChange("blogHash", e.target.value)}
-          placeholder="Enter hashtags for your blog (e.g., #Tech, #Health)"
-        />
-
-        {/* Blog Image Upload */}
-        <div className="flex flex-col gap-2">
-          <p>Blog Image:</p>
-          {editedBlog.blogImage && (
-            <img
-              src={editedBlog.blogImage}
-              alt="Preview"
-              className="w-[400px] h-[300px] object-cover"
-            />
-          )}
-          <Upload
-            beforeUpload={() => false} // Prevent automatic upload
-            onChange={handleImageUpload}
-            listType="picture-card"
-            fileList={fileList}
-            maxCount={1} // Only allow 1 file
-          >
-            <Button icon={<UploadOutlined />}>Upload New Image</Button>
-          </Upload>
-        </div>
-
-        {/* Blog Description */}
-        <label className="block text-sm font-medium text-gray-700">
-          Blog Content
-        </label>
-        <div className="w-full">
-          <JoditEditor
-            ref={editorRef}
-            value={editedBlog.blogDescription}
-            onBlur={(newContent) =>
-              handleInputChange("blogDescription", newContent)
-            }
-            config={{
-              readonly: false,
-              toolbarSticky: false,
-              height: 500,
-              width: "100%",
-            }}
+          <Input
+            placeholder="Enter blog hashtag"
+            onChange={handleInputChange}
           />
-        </div>
+        </Form.Item>
 
-        {/* Action Buttons */}
-        <div className="flex gap-2">
-          <Button
-            type="primary"
-            className="bg-blue-500 text-white"
-            onClick={handleEditSubmit}
+        <Form.Item label="Blog Image">
+          <Upload
+            name="blog_image"
+            listType="picture-card"
+            showUploadList={false}
+            beforeUpload={() => false}
+            onChange={handleChange}
           >
+            {imagePreview ? (
+              <img src={profileImage} alt="blog" />
+            ) : (
+              <div>
+                <UploadOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            )}
+          </Upload>
+        </Form.Item>
+
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[
+            { required: true, message: "Please input the blog description!" },
+          ]}
+        >
+          {content}
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
             Save Changes
           </Button>
-          <Button
-            className="border-blue-500 text-blue-500"
-            onClick={() => setShowEditBlogModal(false)}
-          >
-            Cancel
-          </Button>
-        </div>
-      </div>
+        </Form.Item>
+      </Form>
     </div>
   );
 }
 
 export default BlogEdit;
-
-// import { UploadOutlined } from "@ant-design/icons";
-// import ImageUpload from "./ImageUploader";
-// import { Button, Card, Form, Input, message, Upload } from "antd";
-// import { useMemo, useState } from "react";
-// import JoditEditor from "jodit-react";
-// function BlogEdit({ selectedBlog }) {
-//   const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
-
-//   const [form] = Form.useForm();
-//   const [blogData, setBlogData] = useState({
-//     title: "",
-//     hashtag: "",
-//     blog_image: null,
-//     description: "",
-//   });
-
-//   const handleInputChange = (key, value) => {
-//     setBlogData((prev) => ({
-//       ...prev,
-//       [key]: value,
-//     }));
-//   };
-
-//   const handleImageUpload = ({ file }) => {
-//     const reader = new FileReader();
-//     reader.onload = (e) => {
-//       handleInputChange("blog_image", file);
-//     };
-//     reader.readAsDataURL(file);
-//   };
-
-//   const handleSubmit = async () => {
-//     try {
-//       const values = await form.validateFields();
-//       const formData = new FormData();
-//       formData.append("title", values.title);
-//       formData.append("hashtag", values.hashtag);
-//       formData.append("description", blogData.description);
-//       if (blogData.blog_image) {
-//         formData.append("blog_image", blogData.blog_image);
-//       }
-
-//       await updateBlog(formData);
-//       message.success("Blog added successfully!");
-//     } catch (error) {
-//       message.error("Please fill out all fields correctly.");
-//     }
-//   };
-
-//   const contentText = useMemo(() => {
-//     return (
-//       <JoditEditor
-//         value={blogData.description}
-//         onBlur={(newContent) => handleInputChange("description", newContent)}
-//         config={{ readonly: false, height: 300 }}
-//       />
-//     );
-//   }, []);
-//   return (
-//     <Card title="Add New Blog" bordered={false} className="w-full mx-auto mt-6">
-//       <Form requiredMark={false} form={form} layout="vertical">
-//         {/* Blog Title */}
-//         <Form.Item
-//           label="Blog Title"
-//           name="title"
-//           rules={[{ required: true, message: "Please enter the blog title" }]}
-//         >
-//           <Input
-//             placeholder="Enter blog title"
-//             onChange={(e) => handleInputChange("title", e.target.value)}
-//           />
-//         </Form.Item>
-
-//         {/* Blog Hashtag */}
-//         <Form.Item
-//           label="Blog Hashtag"
-//           name="hashtag"
-//           rules={[{ required: true, message: "Please enter a hashtag" }]}
-//         >
-//           <Input
-//             placeholder="Enter blog hashtag"
-//             onChange={(e) => handleInputChange("hashtag", e.target.value)}
-//           />
-//         </Form.Item>
-//         <ImageUpload></ImageUpload>
-//         {/* Image Upload */}
-//         <Form.Item
-//           label="Blog Image"
-//           name="blog_image"
-//           rules={[{ required: true, message: "Please upload an image" }]}
-//         >
-//           <Upload
-//             beforeUpload={() => false}
-//             showUploadList={false}
-//             onChange={handleImageUpload}
-//           >
-//             <Button icon={<UploadOutlined />}>Upload Image</Button>
-//           </Upload>
-//           {blogData.blog_image && (
-//             <img
-//               src={URL.createObjectURL(blogData.blog_image)}
-//               alt="Preview"
-//               className="mt-2 w-full max-h-60 object-cover rounded-md"
-//             />
-//           )}
-//         </Form.Item>
-
-//         {/* Blog Description */}
-//         <Form.Item
-//           label="Blog Description"
-//           name="description"
-//           rules={[{ required: true, message: "Please enter a description" }]}
-//         >
-//           {contentText}
-//         </Form.Item>
-
-//         {/* Submit and Cancel Buttons */}
-//         <Form.Item>
-//           <Button
-//             type="primary"
-//             onClick={handleSubmit}
-//             loading={isUpdating}
-//             className="mr-2"
-//           >
-//             Update Blog
-//           </Button>
-//           {/* <Button onClick={() => setShowEditBlogModal(false)}>Cancel</Button> */}
-//         </Form.Item>
-//       </Form>
-//     </Card>
-//   );
-// }
-
-// export default BlogEdit;

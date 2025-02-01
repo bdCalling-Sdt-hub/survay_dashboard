@@ -14,7 +14,7 @@ import { imageUrl, stripHtmlTags } from "../../utils/server";
 const BlogTable = () => {
   const [showBlogModal, setShowBlogModal] = useState(false);
   const [showEditBlogModal, setShowEditBlogModal] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [selectedBlog, setSelectedBlog, refetch] = useState(null);
   const { data: allBlogData, isLoading } = useGetAllBlogQuery();
   const [deleteBlog] = useDeleteBlogMutation();
 
@@ -76,7 +76,7 @@ const BlogTable = () => {
       dataIndex: "hashtag",
       key: "hashtag",
       render: (text) => (
-        <span style={{ color: "#2d5882", fontWeight: "bold" }}>#{text}</span>
+        <span style={{ color: "#2d5882", fontWeight: "bold" }}>{text}</span>
       ),
     },
     {
@@ -180,6 +180,7 @@ const BlogTable = () => {
           <BlogEdit
             setShowEditBlogModal={setShowEditBlogModal}
             selectedBlog={selectedBlog}
+            refetch={refetch}
           />
         </Modal>
       )}

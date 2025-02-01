@@ -35,6 +35,7 @@ const Register = () => {
                         <Input.Password
                             placeholder="Enter your password"
                             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                            className='h-12'
                         />
                     </Form.Item>
 
@@ -58,6 +59,7 @@ const Register = () => {
                     >
                         <Input.Password
                             placeholder="Re-enter your password"
+                            className='h-12'
                             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                         />
                     </Form.Item>

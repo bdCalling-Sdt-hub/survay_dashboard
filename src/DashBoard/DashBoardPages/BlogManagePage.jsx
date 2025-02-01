@@ -10,7 +10,7 @@ function BlogManagePage() {
 
   return (
     <div>
-      <div className="flex items-center mb-12 justify-between w-full p-2 rounded-md bg-[#d6f4ff]">
+      <div className="flex pt-4 items-center mb-12 justify-between w-full p-2 rounded-md bg-[#d6f4ff]">
         <h1 className="font-bold text-xl">Blog Management</h1>
         <div className="flex items-center gap-2">
           <Button className="bg-[#003366] hover:bg-[#003366]/70 text-white flex items-center gap-1">
@@ -29,7 +29,6 @@ function BlogManagePage() {
       <BlogTable />
       {showEditBlogModal && (
         <Modal
-          title="Edit Blog"
           open={showEditBlogModal}
           onCancel={() => setShowEditBlogModal(false)}
           footer={null}

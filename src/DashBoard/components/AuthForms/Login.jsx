@@ -88,7 +88,6 @@ const Login = () => {
           </Form.Item>
 
           <div className="flex justify-between items-center">
-            <Checkbox className="text-sm">Remember Password</Checkbox>
             <Link
               to="/auth/login/email-confirm"
               className="text-sm text-blue-500 hover:underline"

@@ -63,7 +63,7 @@
   }
 
   .sidebar-button-black {
-    @apply flex justify-start items-center gap-2 w-full text-[#fff] bg-[var(--black-700)] p-3 rounded hover:text-[var(--black-700)] hover:bg-[var(--orange-600)] transition-all;
+    @apply flex justify-start items-center gap-2 w-full text-[#fff] bg-[#002140] p-3 rounded hover:text-[var(--black-700)] hover:bg-[var(--orange-600)] transition-all;
   }
 
   .sidebar-button-orange {

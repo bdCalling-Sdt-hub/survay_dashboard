@@ -10,31 +10,34 @@ import { imageUrl } from "../../utils/server";
 const WhyTable = () => {
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const { data, isLoading } = useGetAllWhyQuery();
+
   const handleSearch = (e) => {
     setSearchText(e.target.value.toLowerCase());
   };
 
   const handleUserDetails = (user) => {
+    setSelectedUser(user);
     setIsModalVisible(true);
   };
+
   const handleCloseModal = () => {
     setIsModalVisible(false);
+    setSelectedUser(null);
   };
-
-  console.log(data?.data?.result);
 
   const columns = [
     {
       title: "SL No",
-      width: 100,
+      width: 50,
       dataIndex: "slNo",
       key: "slNo",
       fixed: "left",
     },
     {
       title: "User Info",
-      width: 200,
+      width: 150,
       dataIndex: "userInfo",
       key: "userInfo",
       fixed: "left",
@@ -53,19 +56,19 @@ const WhyTable = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      width: 150,
+      width: 100,
     },
     {
       title: "Phone",
       dataIndex: "phone",
       key: "phone",
-      width: 150,
+      width: 100,
     },
     {
       title: "Action",
       key: "operation",
       fixed: "right",
-      width: 100,
+      width: 50,
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <FaEye
@@ -89,10 +92,17 @@ const WhyTable = () => {
     data?.data?.result?.map((item, index) => ({
       key: item._id,
       slNo: index + 1,
-      userName: item?.user?.name,
-      userImage: item?.user?.profile_image,
-      email: item?.user?.email,
-      phone: item?.user?.phone,
+      userName: item.user?.name,
+      userImage: item.user?.profile_image,
+      email: item.user?.email,
+      phone: item.user?.phone,
+      initialSummary: item.initialSummary,
+      keyPoints: item.keyPoints,
+      strengths: item.strengths,
+      weaknesses: item.weaknesses,
+      pieChartData: item.pieChartData,
+      progressBarData: item.progressBarData,
+      finalSummary: item.finalSummary,
     })) || [];
 
   return (
@@ -110,9 +120,9 @@ const WhyTable = () => {
           showSizeChanger: false,
           pageSize: 8,
         }}
-        scroll={{
-          x: 1500,
-        }}
+        // scroll={{
+        //   x: 1500,
+        // }}
       />
       <Modal
         title={null}
@@ -122,7 +132,8 @@ const WhyTable = () => {
         width={1200}
         className="user-modal md:min-w-[800px]"
       >
-        <ResultOfWhyUser />
+        {/* Pass the selected user's information as props */}
+        <ResultOfWhyUser user={selectedUser} />
       </Modal>
     </div>
   );
