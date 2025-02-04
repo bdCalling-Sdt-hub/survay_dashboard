@@ -90,7 +90,7 @@ function NewBlogAdd({ setShowEditBlogModal }) {
           {contentEditor}
         </div>
 
-        <Form.Item>
+        <Form.Item className="mt-4">
           <Button
             type="primary"
             onClick={handleSubmit}

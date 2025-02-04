@@ -253,3 +253,6 @@ body::-webkit-scrollbar {
 .jodit-wysiwyg {
   background-color: #fff;
 }
+.recharts-legend-item {
+  margin-top: 10px !important;
+}

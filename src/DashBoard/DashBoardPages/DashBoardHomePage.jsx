@@ -59,7 +59,7 @@ function DashBoardHomePage() {
   ];
   return (
     <div className="flex items-center flex-col justify-center gap-12">
-      <div className="flex  items-center justify-center gap-12 w-full">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {data.map((card, idx) => (
           <div
             key={idx}

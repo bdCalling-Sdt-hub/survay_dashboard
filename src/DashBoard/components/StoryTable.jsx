@@ -7,7 +7,7 @@ import {
   useApproveStoryMutation,
   useDeleteStoryMutation,
 } from "../../redux/services/storyApis";
-import { imageUrl } from "../../utils/server";
+import { imageUrl, stripHtmlTags } from "../../utils/server";
 
 const StoryTable = () => {
   const [activeFilter, setActiveFilter] = useState("Pending");
@@ -35,7 +35,7 @@ const StoryTable = () => {
     storyData?.data?.result?.map((item) => ({
       _id: item._id,
       title: item.title,
-      description: item.description,
+      description: stripHtmlTags(item.description),
       story_image: item.story_image,
       author: {
         name: item.author?.name,
@@ -100,7 +100,7 @@ const StoryTable = () => {
     {
       title: "SL No",
       key: "index",
-      width: 50,
+      width: 100,
       render: (_, __, index) => <span>{index + 1}</span>,
     },
     {
@@ -234,15 +234,15 @@ const StoryTable = () => {
           <div>
             <img
               src={
-                selectedStory.story_image
-                  ? imageUrl(selectedStory.story_image)
+                selectedStory?.story_image
+                  ? imageUrl(selectedStory?.story_image)
                   : "https://via.placeholder.com/300"
               }
-              alt={selectedStory.title}
+              alt={selectedStory?.title}
               className="rounded-lg object-cover w-full h-auto max-h-72"
             />
-            <h2 className="text-2xl font-bold mt-4">{selectedStory.title}</h2>
-            <p className="mt-2">{selectedStory.description}</p>
+            <h2 className="text-2xl font-bold mt-4">{selectedStory?.title}</h2>
+            <p className="mt-2">{stripHtmlTags(selectedStory?.description)}</p>
           </div>
         )}
       </Modal>

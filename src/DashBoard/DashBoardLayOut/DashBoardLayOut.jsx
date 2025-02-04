@@ -78,7 +78,6 @@ function DashBoardLayOut() {
   };
 
   const user = {
-    login: true,
     photoURL: imageUrl(data?.data?.profile_image),
     displayName: data?.data?.name,
     email: data?.data?.email,

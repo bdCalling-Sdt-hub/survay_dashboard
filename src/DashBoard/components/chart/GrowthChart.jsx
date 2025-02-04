@@ -67,7 +67,7 @@ const GrowthChart = () => {
     <div
       style={{
         width: "100%",
-        height: "350px",
+        height: "450px",
         backgroundColor: "#fff",
         borderRadius: "12px",
         padding: "20px",

@@ -248,6 +248,9 @@ const UserTable = () => {
         loading={isLoading}
         columns={columns}
         dataSource={dataSource}
+        scroll={{
+          x: columns?.length * 150,
+        }}
         pagination={{
           pageSize: data?.data?.meta?.limit || 10,
           total: data?.data?.meta?.total || 0,
@@ -256,6 +259,7 @@ const UserTable = () => {
         }}
         onChange={handleChange}
       />
+
       {/* User Details Modal */}
       <Modal
         width={1200}

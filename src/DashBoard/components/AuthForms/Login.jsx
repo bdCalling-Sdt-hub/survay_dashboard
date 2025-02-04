@@ -1,4 +1,4 @@
-import { Form, Input, Button, Checkbox, Spin } from "antd";
+import { Form, Input, Button, Spin } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -28,6 +28,7 @@ const Login = () => {
           if (decoded.role === "superAdmin") {
             navigate("/");
           } else {
+            localStorage.removeItem("accessToken");
             navigate("/auth/login");
           }
         } catch (decodeError) {
