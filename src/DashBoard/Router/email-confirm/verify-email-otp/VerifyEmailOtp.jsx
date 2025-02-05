@@ -37,7 +37,7 @@ const VerifyEmailOtp = () => {
     const otpString = otp.join("");
     const otpNumberConvert = Number(otpString);
 
-    if (!otpString || otpString.length !== 6) {
+    if (!otpString || otpString.length !== 5) {
       message.error("Please enter a valid 6-digit OTP.");
       return;
     }

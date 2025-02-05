@@ -10,8 +10,8 @@ export const userApis = baseApis.injectEndpoints({
       providesTags: ["profile"],
     }),
     getNormalUser: builder.query({
-      query: ({ searchTerm }) => {
-        const params = { searchTerm };
+      query: ({ searchTerm, page }) => {
+        const params = { searchTerm, page };
         return {
           url: `/normal-user/get-all`,
           method: "GET",
@@ -37,6 +37,13 @@ export const userApis = baseApis.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    sendAnnouncement: builder.mutation({
+      query: ({ data }) => ({
+        url: "/send-annousment",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -45,4 +52,5 @@ export const {
   useSuperAdminProfileGetQuery,
   useGetNormalUserQuery,
   useUpdateStatusMutation,
+  useSendAnnouncementMutation,
 } = userApis;

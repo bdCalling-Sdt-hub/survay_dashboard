@@ -11,6 +11,7 @@ import {
   useGetAllMetaDataQuery,
   useGetOverViewsQuery,
 } from "../../redux/services/metaApis";
+import UserTable from "../components/UserTable";
 
 function DashBoardHomePage() {
   const { data: userData, isLoading } = useGetNormalUserQuery({});
@@ -58,7 +59,7 @@ function DashBoardHomePage() {
     // },
   ];
   return (
-    <div className="flex items-center flex-col justify-center gap-12">
+    <div className="flex  flex-col justify-center gap-12">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {data.map((card, idx) => (
           <div
@@ -83,7 +84,8 @@ function DashBoardHomePage() {
           </Button>
         </Link>
       </div>
-      <ShortDonation></ShortDonation>
+      {/* <ShortDonation></ShortDonation> */}
+      <UserTable />
     </div>
   );
 }

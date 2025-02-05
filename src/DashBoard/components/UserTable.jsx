@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { Table, Input, Modal, Button, Spin } from "antd";
 import { MdBlock, MdMessage } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -8,11 +8,12 @@ import Swal from "sweetalert2";
 import { GrAnnounce } from "react-icons/gr";
 import {
   useGetNormalUserQuery,
+  useSendAnnouncementMutation,
   useUpdateStatusMutation,
 } from "../../redux/services/userApis";
-import { imageUrl } from "../../utils/server";
-import toast from "react-hot-toast";
+import { imageUrl, stripHtmlTags } from "../../utils/server";
 import JoditEditor from "jodit-react";
+import toast from "react-hot-toast";
 
 const debounce = (func, delay) => {
   let timer;
@@ -28,10 +29,15 @@ const UserTable = () => {
   const [sortedInfo, setSortedInfo] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const { data, isLoading } = useGetNormalUserQuery({ searchTerm: searchText });
+  const { data, isLoading } = useGetNormalUserQuery({
+    searchTerm: searchText,
+    page,
+  });
   const [updateStatus, { isLoading: isUpdating }] = useUpdateStatusMutation();
   const [announcementTitle, setAnnouncementTitle] = useState("");
   const [announcementMessage, setAnnouncementMessage] = useState("");
+  const [sendAnnouncement, { isLoading: isSending }] =
+    useSendAnnouncementMutation();
 
   const debouncedSearch = debounce((value) => {
     setSearchText(value.toLowerCase());
@@ -216,12 +222,22 @@ const UserTable = () => {
     );
   }, [announcementMessage]);
 
-  const handleSend = () => {
-    console.log("Announcement Sent:", {
+  const handleSend = async () => {
+    const data = {
       title: announcementTitle,
-      message: announcementMessage,
-    });
-    setAnnounce(false);
+      message: stripHtmlTags(announcementMessage),
+    };
+    if (!data.title || !data.message) {
+      toast.error("Please enter title and message.");
+      return;
+    }
+    const response = await sendAnnouncement(data).unwrap();
+    if (response.success) {
+      toast.success("Announcement sent successfully.");
+      setAnnounce(false);
+    } else {
+      toast.error("Failed to send announcement.");
+    }
   };
 
   const handleCloseAnnounceModal = () => {
@@ -394,7 +410,7 @@ const UserTable = () => {
         <div className="flex justify-end gap-4">
           <Button onClick={handleCloseAnnounceModal}>Cancel</Button>
           <Button type="primary" onClick={handleSend}>
-            Send
+            {isSending ? "Sending..." : "Send"}
           </Button>
         </div>
       </Modal>
