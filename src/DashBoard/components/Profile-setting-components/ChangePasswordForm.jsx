@@ -17,7 +17,7 @@ const ChangePasswordForm = () => {
 
     try {
       const result = await changePassword(data).unwrap();
-      console.log("Password changed successfully:", result);
+      // console.log("Password changed successfully:", result);
       message.success("Password updated successfully!");
     } catch (error) {
       console.error("Error changing password:", error);

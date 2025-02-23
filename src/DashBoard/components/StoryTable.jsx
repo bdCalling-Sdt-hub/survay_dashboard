@@ -7,7 +7,7 @@ import {
   useApproveStoryMutation,
   useDeleteStoryMutation,
 } from "../../redux/services/storyApis";
-import { imageUrl, stripHtmlTags } from "../../utils/server";
+import { imageUrl } from "../../utils/server";
 
 const StoryTable = () => {
   const [activeFilter, setActiveFilter] = useState("Pending");
@@ -35,7 +35,9 @@ const StoryTable = () => {
     storyData?.data?.result?.map((item) => ({
       _id: item._id,
       title: item.title,
-      description: stripHtmlTags(item.description),
+      description: (
+        <div dangerouslySetInnerHTML={{ __html: item.description }} />
+      ),
       story_image: item.story_image,
       author: {
         name: item.author?.name,
@@ -242,7 +244,10 @@ const StoryTable = () => {
               className="rounded-lg object-cover w-full h-auto max-h-72"
             />
             <h2 className="text-2xl font-bold mt-4">{selectedStory?.title}</h2>
-            <p className="mt-2">{stripHtmlTags(selectedStory?.description)}</p>
+            <p
+              className="mt-2"
+              dangerouslySetInnerHTML={{ __html: selectedStory?.description }}
+            ></p>
           </div>
         )}
       </Modal>

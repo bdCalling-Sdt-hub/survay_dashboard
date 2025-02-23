@@ -5,7 +5,7 @@ import { Tooltip } from "antd";
 import { PiWarningCircleThin } from "react-icons/pi";
 
 function ResultOfWhyUser({ user }) {
-  console.log(user);
+  // console.log(user);
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28EF6"];
 
   if (!user) {

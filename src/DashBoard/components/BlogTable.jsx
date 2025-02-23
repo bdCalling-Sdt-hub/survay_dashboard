@@ -9,7 +9,7 @@ import {
   useDeleteBlogMutation,
   useGetAllBlogQuery,
 } from "../../redux/services/blogApis";
-import { imageUrl, stripHtmlTags } from "../../utils/server";
+import { imageUrl } from "../../utils/server";
 
 const BlogTable = () => {
   const [showBlogModal, setShowBlogModal] = useState(false);
@@ -88,10 +88,16 @@ const BlogTable = () => {
       title: "Blog Description",
       dataIndex: "description",
       key: "description",
-      render: (content) =>
-        content && content.length > 50
-          ? stripHtmlTags(content.substring(0, 50)) + "..."
-          : stripHtmlTags(content),
+      render: (content) => (
+        <span
+          dangerouslySetInnerHTML={{
+            __html:
+              content && content.length > 50
+                ? content.substring(0, 50) + "..."
+                : content,
+          }}
+        />
+      ),
     },
     {
       title: "Publish Date",

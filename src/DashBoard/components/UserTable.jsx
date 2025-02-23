@@ -11,7 +11,7 @@ import {
   useSendAnnouncementMutation,
   useUpdateStatusMutation,
 } from "../../redux/services/userApis";
-import { imageUrl, stripHtmlTags } from "../../utils/server";
+import { imageUrl } from "../../utils/server";
 import JoditEditor from "jodit-react";
 import toast from "react-hot-toast";
 
@@ -76,7 +76,7 @@ const UserTable = () => {
         data: { status: updatedStatus },
       }).unwrap();
 
-      console.log(response);
+      // console.log(response);
 
       toast.success(`User has been ${updatedStatus}.`);
       handleCloseModal();
@@ -225,7 +225,7 @@ const UserTable = () => {
   const handleSend = async () => {
     const data = {
       title: announcementTitle,
-      message: stripHtmlTags(announcementMessage),
+      message: { __html: announcementMessage },
     };
     if (!data.title || !data.message) {
       toast.error("Please enter title and message.");
@@ -241,7 +241,7 @@ const UserTable = () => {
   };
 
   const handleCloseAnnounceModal = () => {
-    console.log("Modal Closed");
+    // console.log("Modal Closed");
     setAnnounce(false);
   };
 
@@ -394,7 +394,7 @@ const UserTable = () => {
             className="w-full"
             value={announcementTitle}
             onChange={(e) => {
-              console.log("Title Updated:", e.target.value);
+              // console.log("Title Updated:", e.target.value);
               setAnnouncementTitle(e.target.value);
             }}
           />

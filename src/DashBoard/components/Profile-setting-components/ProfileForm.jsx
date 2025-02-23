@@ -11,7 +11,7 @@ const ProfileForm = ({ data }) => {
       icon: "success",
     });
   };
-  console.log(data);
+  // console.log(data);
   const { name, username, email, profile_image } = data;
   return (
     <div style={{ maxWidth: "500px", margin: "0 auto", padding: "20px" }}>

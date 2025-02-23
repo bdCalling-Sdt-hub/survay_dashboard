@@ -27,7 +27,7 @@ function DashBoardHomePage() {
       </div>
     );
   }
-  console.log(overViewData);
+  // console.log(overViewData);
 
   const { totalUser, totalStory, totalWhy, totalBlog } = metaData.data;
 

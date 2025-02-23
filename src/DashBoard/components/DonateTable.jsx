@@ -71,7 +71,7 @@ const DonateTable = () => {
             pagination={{
                 pageSize: 8,
                 total: 120,
-                onChange: (page) => console.log(page),
+                // onChange: (page) => console.log(page),
                 showSizeChanger: false
             }}
             dataSource={dataSource}

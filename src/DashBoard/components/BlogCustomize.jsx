@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { imageUrl, stripHtmlTags } from "../../utils/server";
+import { imageUrl } from "../../utils/server";
 function BlogCustomize({ selectedBlog }) {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12">
@@ -11,16 +11,19 @@ function BlogCustomize({ selectedBlog }) {
           {selectedBlog?.title}
         </h1>
         <p className="text-gray-600 text-sm sm:text-base">
-          <strong>Date:</strong> {selectedBlog?.createdAt || "N/A"}
+        <strong>Date:</strong> {new Date(selectedBlog?.createdAt).toLocaleString("en-US") || "N/A"}
         </p>
         <img
           src={imageUrl(selectedBlog.blog_image)}
           alt={selectedBlog?.title}
           className="w-[200px] sm:max-h-[300px] object-cover rounded-lg shadow-lg"
         />
-        <p className="text-gray-600 text-sm sm:text-base">
+        <p
+          dangerouslySetInnerHTML={{ __html: selectedBlog?.description }}
+          className="text-gray-600 text-sm sm:text-base"
+        >
           <strong>Description:</strong>{" "}
-          {stripHtmlTags(selectedBlog?.description) || "N/A"}
+          {selectedBlog?.description || "N/A"}
         </p>
       </div>
     </div>
@@ -28,3 +31,4 @@ function BlogCustomize({ selectedBlog }) {
 }
 
 export default BlogCustomize;
+

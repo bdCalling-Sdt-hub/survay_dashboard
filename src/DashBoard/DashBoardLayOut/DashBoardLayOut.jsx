@@ -88,7 +88,7 @@ function DashBoardLayOut() {
   };
 
   const handleSignOut = () => {
-    console.log("Sign Out");
+    // console.log("Sign Out");
     localStorage.removeItem("accessToken");
     navigate("/auth/login");
   };

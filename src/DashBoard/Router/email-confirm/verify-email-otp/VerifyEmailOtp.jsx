@@ -49,7 +49,7 @@ const VerifyEmailOtp = () => {
 
     try {
       const response = await verifyOtp(data).unwrap();
-      console.log("OTP Verified:", response);
+      // console.log("OTP Verified:", response);
 
       message.success("OTP Verified! Redirecting...");
 
