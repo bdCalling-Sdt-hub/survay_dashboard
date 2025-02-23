@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-import { Input, Modal, Table } from "antd";
-import { FaEye, FaRegCalendarCheck, FaRegTrashAlt } from "react-icons/fa";
-import Swal from "sweetalert2";
+import { useState, useEffect } from 'react';
+import { Input, Modal, Table } from 'antd';
+import { FaEye, FaRegCalendarCheck, FaRegTrashAlt } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 import {
   useGetAllStoryQuery,
   useApproveStoryMutation,
   useDeleteStoryMutation,
-} from "../../redux/services/storyApis";
-import { imageUrl } from "../../utils/server";
+} from '../../redux/services/storyApis';
+import { imageUrl } from '../../utils/server';
 
 const StoryTable = () => {
-  const [activeFilter, setActiveFilter] = useState("Pending");
+  const [activeFilter, setActiveFilter] = useState('Pending');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStory, setSelectedStory] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [approvedStory, { isLoadingStory }] = useApproveStoryMutation();
   const [deleteStory, { isLoading: isDeleting }] = useDeleteStoryMutation();
 
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -35,9 +35,7 @@ const StoryTable = () => {
     storyData?.data?.result?.map((item) => ({
       _id: item._id,
       title: item.title,
-      description: (
-        <div dangerouslySetInnerHTML={{ __html: item.description }} />
-      ),
+      description: item.description,
       story_image: item.story_image,
       author: {
         name: item.author?.name,
@@ -49,20 +47,20 @@ const StoryTable = () => {
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: "You won't be able to revert this!",
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await deleteStory({ id }).unwrap();
-          Swal.fire("Deleted!", "The story has been deleted.", "success");
+          Swal.fire('Deleted!', 'The story has been deleted.', 'success');
         } catch (error) {
-          Swal.fire("Error!", "Failed to delete the story.", error);
+          Swal.fire('Error!', 'Failed to delete the story.', error);
         }
       }
     });
@@ -70,26 +68,27 @@ const StoryTable = () => {
 
   const handleApprove = async (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You want to approve this story!",
-      icon: "warning",
+      title: 'Are you sure?',
+      text: 'You want to approve this story!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, approve it!",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, approve it!',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await approvedStory({ id }).unwrap();
-          Swal.fire("Approved!", "The story has been approved.", "success");
+          Swal.fire('Approved!', 'The story has been approved.', 'success');
         } catch (error) {
-          Swal.fire("Error!", "Failed to approve the story.", error);
+          Swal.fire('Error!', 'Failed to approve the story.', error);
         }
       }
     });
   };
 
   const handleStoryDetails = (story) => {
+    console.log(story);
     setSelectedStory(story);
     setIsModalVisible(true);
   };
@@ -100,15 +99,15 @@ const StoryTable = () => {
 
   const columns = [
     {
-      title: "SL No",
-      key: "index",
+      title: 'SL No',
+      key: 'index',
       width: 100,
       render: (_, __, index) => <span>{index + 1}</span>,
     },
     {
-      title: "Story Media",
-      dataIndex: "story_image",
-      key: "story_image",
+      title: 'Story Media',
+      dataIndex: 'story_image',
+      key: 'story_image',
       width: 120,
       render: (src) => (
         <img
@@ -117,36 +116,42 @@ const StoryTable = () => {
           style={{
             width: 60,
             height: 60,
-            objectFit: "cover",
-            borderRadius: "5px",
+            objectFit: 'cover',
+            borderRadius: '5px',
           }}
         />
       ),
     },
     {
-      title: "Story Name",
-      dataIndex: "title",
-      key: "title",
+      title: 'Story Name',
+      dataIndex: 'title',
+      key: 'title',
     },
     {
-      title: "Story Description",
-      dataIndex: "description",
-      key: "description",
-      render: (text) =>
-        text && text.length > 50
-          ? text.substring(0, 50) + "..."
-          : text || "No description available",
+      title: 'Story Description',
+      dataIndex: 'description',
+      key: 'description',
+      render: (content) => (
+        <div
+          dangerouslySetInnerHTML={{
+            __html:
+              content && content.length > 50
+                ? content.substring(0, 50) + '...'
+                : content,
+          }}
+        />
+      ),
     },
     {
-      title: "Publish Date",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      title: 'Publish Date',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
       render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
     },
     {
-      title: "Action",
-      key: "action",
+      title: 'Action',
+      key: 'action',
       width: 150,
       render: (_, record) => (
         <div className="flex items-center gap-2">
@@ -154,13 +159,13 @@ const StoryTable = () => {
             onClick={() => handleStoryDetails(record)}
             className="text-white cursor-pointer bg-[#00B0F2] w-8 p-2 hover:opacity-75 h-8 rounded-md"
           />
-          {record.status !== "Approved" && (
+          {record.status !== 'Approved' && (
             <FaRegCalendarCheck
               onClick={() => handleApprove(record._id)}
               className={`text-white cursor-pointer w-8 p-2 hover:opacity-75 h-8 rounded-md ${
                 isLoadingStory
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#2d5882]"
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-[#2d5882]'
               }`}
               disabled={isLoadingStory}
             />
@@ -174,7 +179,6 @@ const StoryTable = () => {
       ),
     },
   ];
-
   return (
     <div>
       {/* Search Bar */}
@@ -188,23 +192,23 @@ const StoryTable = () => {
       </div>
 
       {/* Filter Buttons */}
-      <div style={{ marginBottom: "16px", display: "flex", gap: "24px" }}>
+      <div style={{ marginBottom: '16px', display: 'flex', gap: '24px' }}>
         <button
-          onClick={() => setActiveFilter("Pending")}
+          onClick={() => setActiveFilter('Pending')}
           className={
-            activeFilter === "Pending"
-              ? "text-[#00B0F2] border-b-2 text-base border-[#00B0F2]"
-              : "text-base"
+            activeFilter === 'Pending'
+              ? 'text-[#00B0F2] border-b-2 text-base border-[#00B0F2]'
+              : 'text-base'
           }
         >
           Requested Stories
         </button>
         <button
-          onClick={() => setActiveFilter("Approved")}
+          onClick={() => setActiveFilter('Approved')}
           className={
-            activeFilter === "Approved"
-              ? "text-[#00B0F2] text-base border-b-2 border-[#00B0F2]"
-              : "text-base"
+            activeFilter === 'Approved'
+              ? 'text-[#00B0F2] text-base border-b-2 border-[#00B0F2]'
+              : 'text-base'
           }
         >
           Approved Stories
@@ -226,7 +230,7 @@ const StoryTable = () => {
 
       {/* Modal */}
       <Modal
-        title={selectedStory?.title || "Story Details"}
+        title={selectedStory?.title || 'Story Details'}
         open={isModalVisible}
         onCancel={handleCloseModal}
         footer={null}
@@ -238,16 +242,18 @@ const StoryTable = () => {
               src={
                 selectedStory?.story_image
                   ? imageUrl(selectedStory?.story_image)
-                  : "https://via.placeholder.com/300"
+                  : 'https://via.placeholder.com/300'
               }
               alt={selectedStory?.title}
               className="rounded-lg object-cover w-full h-auto max-h-72"
             />
             <h2 className="text-2xl font-bold mt-4">{selectedStory?.title}</h2>
-            <p
-              className="mt-2"
-              dangerouslySetInnerHTML={{ __html: selectedStory?.description }}
-            ></p>
+            <div
+              className="mt-3"
+              dangerouslySetInnerHTML={{
+                __html: selectedStory?.description || '',
+              }}
+            />
           </div>
         )}
       </Modal>

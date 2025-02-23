@@ -1,3 +1,4 @@
+// export const url = `http://209.97.150.2:5000`;
 export const url = `http://209.97.150.2:5000`;
 export const imageUrl = (image) => {
   return image

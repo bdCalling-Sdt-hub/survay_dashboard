@@ -89,7 +89,7 @@ const BlogTable = () => {
       dataIndex: "description",
       key: "description",
       render: (content) => (
-        <span
+        <div
           dangerouslySetInnerHTML={{
             __html:
               content && content.length > 50
