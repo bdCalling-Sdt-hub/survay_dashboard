@@ -17,7 +17,7 @@ function BlogCustomize({ selectedBlog }) {
         <img
           src={imageUrl(selectedBlog.blog_image)}
           alt={selectedBlog?.title}
-          className="w-[200px] sm:max-h-[300px] object-cover rounded-lg shadow-lg"
+          className="w-[200px] sm:max-h-[300px] md:h-[300px] md:w-[400px] object-cover rounded-lg shadow-lg"
         />
         <div
           className="text-gray-600 text-sm sm:text-base"
