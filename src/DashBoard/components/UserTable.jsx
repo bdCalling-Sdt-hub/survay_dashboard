@@ -238,7 +238,7 @@ const UserTable = () => {
       title: announcementTitle,
       message: { __html: announcementMessage },
     };
-    if (!data.title || !data.message) {
+    if (!data?.title || !data?.message) {
       toast.error('Please enter title and message.');
       return;
     }

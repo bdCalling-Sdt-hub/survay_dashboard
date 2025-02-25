@@ -26,7 +26,7 @@ const Profile = () => {
   const profileImage = image
     ? URL.createObjectURL(image)
     : data?.data?.profile_image
-    ? imageUrl(data.data.profile_image)
+    ? imageUrl(data?.data?.profile_image)
     : "/path/to/default-image.jpg";
 
   return (

@@ -59,7 +59,7 @@ function ResultOfWhyUser({ user }) {
                     fill="#8884d8"
                     label
                   >
-                    {user.pieChartData.map((entry, i) => (
+                    {user.pieChartData?.map((entry, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>

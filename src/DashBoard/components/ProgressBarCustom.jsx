@@ -21,7 +21,7 @@ function ProgressBarCustom({ data }) {
 
         const nextValues = Object.keys(prevValues).reduce((acc, key) => {
           const targetValue =
-            processedData.find((item) => item._id === key)?.percentage || 0;
+            processedData?.find((item) => item._id === key)?.percentage || 0;
           if (prevValues[key] < targetValue) {
             acc[key] = Math.min(prevValues[key] + 1, targetValue);
             allCompleted = false;
@@ -45,7 +45,7 @@ function ProgressBarCustom({ data }) {
   return (
     <div className="mr-12 my-12">
       <Flex vertical gap="small">
-        {processedData.map((item) => (
+        {processedData?.map((item) => (
           <div key={item._id}>
             <p>
               {item.label}: {progressValues[item._id] || 0}%
