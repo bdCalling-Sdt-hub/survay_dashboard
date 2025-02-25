@@ -35,22 +35,22 @@ function DashBoardHomePage() {
     {
       title: 'Total Users',
       icon: userIcon,
-      number: totalUser,
+      number: metaData?.data?.totalUser,
     },
     {
       title: 'Total Blogs',
       icon: blogIcon,
-      number: totalBlog,
+      number: metaData?.data?.totalBlog,
     },
     {
       title: 'Total Clients Story',
       icon: storyIcon,
-      number: totalStory,
+      number: metaData?.data?.totalStory,
     },
     {
       title: 'Total WHY Finds',
       icon: whyIcon,
-      number: totalWhy,
+      number: metaData?.data?.totalWhy,
     },
     // {
     //   title: "Total Earning",
