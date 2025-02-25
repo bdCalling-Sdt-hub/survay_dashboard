@@ -34,15 +34,15 @@ const StoryTable = () => {
   const dataSource =
     storyData?.data?.result?.map((item) => ({
       _id: item._id,
-      title: item.title,
-      description: item.description,
+      title: item.title || 'N/A',
+      description: item.description || 'N/A',
       story_image: item.story_image,
       author: {
-        name: item.author?.name,
+        name: item.author?.name || 'N/A',
         image: item.author?.profile_image,
       },
-      status: item.status,
-      createdAt: item.createdAt,
+      status: item.status || 'N/A',
+      createdAt: item.createdAt || 'N/A',
     })) || [];
 
   const handleDelete = (id) => {

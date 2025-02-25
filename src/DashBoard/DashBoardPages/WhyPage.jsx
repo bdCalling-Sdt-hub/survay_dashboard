@@ -1,5 +1,3 @@
-import { Button } from "antd";
-import { PiFileCsvFill } from "react-icons/pi";
 import WhyTable from "../components/WhyTable";
 
 function WhyPage() {

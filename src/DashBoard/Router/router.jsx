@@ -9,7 +9,6 @@ import UserManage from "../DashBoardPages/UserManage";
 import BlogManagePage from "../DashBoardPages/BlogManagePage";
 import StoryManage from "../DashBoardPages/StoryManage";
 import Login from "../components/AuthForms/Login";
-import Register from "../components/AuthForms/Register";
 import ForgetPassword from "./email-confirm/ForgetPassword";
 import VerifyEmailOtp from "./email-confirm/verify-email-otp/VerifyEmailOtp";
 import ResetPassword from "./email-confirm/verify-email-otp/reset-password/ResetPassword";
@@ -40,7 +39,7 @@ const authRoutes = [
     path: "/auth/login/email-confirm/verify-email-otp/reset-password",
     element: <ResetPassword />,
   },
-  { path: "/auth/register", element: <Register /> },
+  // { path: "/auth/register", element: <Register /> },
 ];
 
 // Main Router

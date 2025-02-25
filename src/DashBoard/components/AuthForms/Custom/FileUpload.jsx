@@ -1,20 +1,21 @@
-import { Upload, message } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { Upload } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
+import toast from 'react-hot-toast';
 
 const { Dragger } = Upload;
 
 const FileUpload = ({ action, onUpload }) => {
   const props = {
-    name: "file",
+    name: 'file',
     multiple: true,
     action,
     onChange(info) {
       const { status } = info.file;
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
+      if (status === 'done') {
+        toast.success(`${info.file.name} file uploaded successfully.`);
         if (onUpload) onUpload(info.file);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
+      } else if (status === 'error') {
+        toast.error(`${info.file.name} file upload failed.`);
       }
     },
   };

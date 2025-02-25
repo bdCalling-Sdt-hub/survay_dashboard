@@ -1,20 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useMemo } from "react";
-import JoditEditor from "jodit-react";
-import { imageUrl } from "../../utils/server";
-import { useUpdateBlogMutation } from "../../redux/services/blogApis";
-import { Form, Input, Button, Upload, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { useState, useEffect, useMemo } from 'react';
+import JoditEditor from 'jodit-react';
+import { imageUrl } from '../../utils/server';
+import { useUpdateBlogMutation } from '../../redux/services/blogApis';
+import { Form, Input, Button, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import toast from 'react-hot-toast';
 
 function BlogEdit({ selectedBlog }) {
   const [editedBlog, setEditedBlog] = useState({
-    id: "",
-    title: "",
-    hashtag: "",
-    description: "",
-    blog_image: "",
+    id: '',
+    title: '',
+    hashtag: '',
+    description: '',
+    blog_image: '',
   });
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState('');
   const [updateBlog] = useUpdateBlogMutation();
   const [form] = Form.useForm();
   const [image, setImage] = useState(null);
@@ -51,20 +52,27 @@ function BlogEdit({ selectedBlog }) {
   };
 
   const handleSubmit = async (values) => {
+    console.log(values.hashtag);
     try {
       const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("hashtag", values.hashtag);
-      formData.append("description", values.description);
+      formData.append('title', values.title);
+      formData.append('hashtag', values.hashtag);
+      formData.append('description', values.description);
       if (image) {
-        formData.append("blog_image", image);
+        formData.append('blog_image', image);
       }
 
-      await updateBlog({ id: editedBlog.id, data: formData }).unwrap();
-      message.success("Blog updated successfully!");
+      const res = await updateBlog({
+        id: editedBlog.id,
+        data: formData,
+      }).unwrap();
+      console.log('ads', res);
+
+      toast.success('Blog updated successfully!');
     } catch (error) {
-      console.error("Update error:", error?.data?.message);
-      message.error("Failed to update blog.",error?.data?.message);
+      console.log(error);
+      console.error('Update error:', error?.data?.message);
+      toast.error(error?.data?.message);
     }
   };
   const content = useMemo(() => {
@@ -87,7 +95,7 @@ function BlogEdit({ selectedBlog }) {
     ? URL.createObjectURL(image)
     : selectedBlog?.blog_image
     ? imageUrl(selectedBlog?.blog_image)
-    : "/path/to/default-image.jpg";
+    : '/path/to/default-image.jpg';
 
   return (
     <div className="container mx-auto p-4">
@@ -97,7 +105,7 @@ function BlogEdit({ selectedBlog }) {
         <Form.Item
           label="Title"
           name="title"
-          rules={[{ required: true, message: "Please input the blog title!" }]}
+          rules={[{ required: true, message: 'Please input the blog title!' }]}
         >
           <Input placeholder="Enter blog title" onChange={handleInputChange} />
         </Form.Item>
@@ -106,7 +114,7 @@ function BlogEdit({ selectedBlog }) {
           label="Hashtag"
           name="hashtag"
           rules={[
-            { required: true, message: "Please input the blog hashtag!" },
+            { required: true, message: 'Please input the blog hashtag!' },
           ]}
         >
           <Input
@@ -138,7 +146,7 @@ function BlogEdit({ selectedBlog }) {
           label="Description"
           name="description"
           rules={[
-            { required: true, message: "Please input the blog description!" },
+            { required: true, message: 'Please input the blog description!' },
           ]}
         >
           {content}

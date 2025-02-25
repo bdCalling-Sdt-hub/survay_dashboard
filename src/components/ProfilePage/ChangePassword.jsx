@@ -1,6 +1,7 @@
 import { Form, Input, Button, Typography, message, Spin } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { usePatchNewPasswordMutation } from '../../redux/services/authApis';
+import toast from 'react-hot-toast';
 
 const { Title } = Typography;
 
@@ -17,10 +18,10 @@ const ChangePasswordForm = () => {
 
     try {
       await changePassword(data).unwrap();
-      message.success('Password updated successfully!');
+      toast.success('Password updated successfully!');
     } catch (error) {
       console.error('Error changing password:', error);
-      message.error('Failed to update the password. Please try again.');
+      toast.error('Failed to update the password. Please try again.');
     }
   };
 

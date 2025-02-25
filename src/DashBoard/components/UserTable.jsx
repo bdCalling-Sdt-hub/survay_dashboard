@@ -1,19 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useMemo, useState } from "react";
-import { Table, Input, Modal, Button, Spin } from "antd";
-import { MdBlock, MdMessage } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { FaUser } from "react-icons/fa";
-import Swal from "sweetalert2";
-import { GrAnnounce } from "react-icons/gr";
+import { useMemo, useState } from 'react';
+import { Table, Input, Modal, Button, Spin } from 'antd';
+import { MdBlock, MdMessage } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+import { FaUser } from 'react-icons/fa';
+import Swal from 'sweetalert2';
+import { GrAnnounce } from 'react-icons/gr';
 import {
   useGetNormalUserQuery,
   useSendAnnouncementMutation,
   useUpdateStatusMutation,
-} from "../../redux/services/userApis";
-import { imageUrl } from "../../utils/server";
-import JoditEditor from "jodit-react";
-import toast from "react-hot-toast";
+} from '../../redux/services/userApis';
+import { imageUrl } from '../../utils/server';
+import JoditEditor from 'jodit-react';
+import toast from 'react-hot-toast';
 
 const debounce = (func, delay) => {
   let timer;
@@ -25,7 +25,7 @@ const debounce = (func, delay) => {
 
 const UserTable = () => {
   const [page, setPage] = useState(1);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [sortedInfo, setSortedInfo] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -34,8 +34,8 @@ const UserTable = () => {
     page,
   });
   const [updateStatus, { isLoading: isUpdating }] = useUpdateStatusMutation();
-  const [announcementTitle, setAnnouncementTitle] = useState("");
-  const [announcementMessage, setAnnouncementMessage] = useState("");
+  const [announcementTitle, setAnnouncementTitle] = useState('');
+  const [announcementMessage, setAnnouncementMessage] = useState('');
   const [sendAnnouncement, { isLoading: isSending }] =
     useSendAnnouncementMutation();
 
@@ -55,37 +55,35 @@ const UserTable = () => {
     if (!selectedUser) return;
 
     const { id, status } = selectedUser;
-    const isBlocked = status === "blocked";
-    const updatedStatus = isBlocked ? "in-progress" : "blocked";
+    const isBlocked = status === 'blocked';
+    const updatedStatus = isBlocked ? 'in-progress' : 'blocked';
 
     try {
       const result = await Swal.fire({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: "You won't be able to revert this!",
-        icon: "warning",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: `Yes, ${isBlocked ? "unblock" : "block"} the user!`,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: `Yes, ${isBlocked ? 'unblock' : 'block'} the user!`,
       });
 
       if (!result.isConfirmed) return;
 
-      const response = await updateStatus({
+      await updateStatus({
         id,
         data: { status: updatedStatus },
       }).unwrap();
 
-      // console.log(response);
-
       toast.success(`User has been ${updatedStatus}.`);
       handleCloseModal();
     } catch (error) {
-      console.error("Error updating user status:", error);
+      console.error('Error updating user status:', error);
       toast.error(
         error?.response?.data?.message ||
           error.message ||
-          "Something went wrong. Please try again."
+          'Something went wrong. Please try again.'
       );
     }
   };
@@ -105,22 +103,22 @@ const UserTable = () => {
 
   const columns = [
     {
-      title: "SL No",
+      title: 'SL No',
       width: 100,
-      dataIndex: "slNo",
-      key: "slNo",
-      fixed: "left",
+      dataIndex: 'slNo',
+      key: 'slNo',
+      fixed: 'left',
     },
     {
-      title: "User Info",
+      title: 'User Info',
       width: 200,
-      dataIndex: "userInfo",
-      key: "userInfo",
-      fixed: "left",
+      dataIndex: 'userInfo',
+      key: 'userInfo',
+      fixed: 'left',
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <img
-            src={imageUrl(`/${record.profileImage}`)}
+            src={imageUrl(record.profileImage)}
             alt="User"
             className="w-10 h-10 object-cover rounded-full"
           />
@@ -132,36 +130,49 @@ const UserTable = () => {
       ),
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
       width: 150,
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
       width: 150,
     },
     {
-      title: "Signup Date",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      title: 'Signup Date',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       width: 150,
       sorter: (a, b) => new Date(a.completionDate) - new Date(b.completionDate),
       sortOrder:
-        sortedInfo.columnKey === "completionDate" ? sortedInfo.order : null,
+        sortedInfo.columnKey === 'completionDate' ? sortedInfo.order : null,
     },
     {
-      title: "User Status",
-      dataIndex: "status",
-      key: "status",
+      title: 'User Status',
+      dataIndex: 'status',
+      key: 'status',
       width: 150,
+      render: (status) => (
+        <span>
+          {status === 'in-progress' ? (
+            <div className="bg-green-500 w-fit px-3 text-white rounded-md">
+              Active
+            </div>
+          ) : (
+            <div className="bg-red-500 w-fit px-3 text-white rounded-md">
+              Blocked
+            </div>
+          )}
+        </span>
+      ),
     },
     {
-      title: "Action",
-      key: "operation",
-      fixed: "right",
+      title: 'Action',
+      key: 'operation',
+      fixed: 'right',
       width: 150,
       render: (_, record) => (
         <div className="flex items-center gap-2">
@@ -188,19 +199,19 @@ const UserTable = () => {
   const dataSource = data?.data?.result?.map((item, i) => ({
     key: item?._id,
     slNo: i + 1,
-    name: item?.name || "N/A",
-    profileImage: item?.profile_image || "N/A",
-    email: item?.email || "N/A",
-    address: `${item?.city || "N/A"}, ${item?.country || "N/A"}`,
-    status: item?.user?.status || "N/A",
-    id: item?.user?._id || "N/A",
-    createdAt: new Date(item?.createdAt).toLocaleDateString() || "N/A",
-    phone: item?.phone || "N/A",
-    city: item?.city || "N/A",
-    country: item?.country || "N/A",
-    profession: item?.profession || "N/A",
-    dob: item?.dateOfBirth || "N/A",
-    education: item?.education || "N/A",
+    name: item?.name || 'N/A',
+    profileImage: item?.profile_image,
+    email: item?.email || 'N/A',
+    address: `${item?.city || 'N/A'}, ${item?.country || 'N/A'}`,
+    status: item?.user?.status || 'N/A',
+    id: item?.user?._id || 'N/A',
+    createdAt: new Date(item?.createdAt).toLocaleDateString() || 'N/A',
+    phone: item?.phone || 'N/A',
+    city: item?.city || 'N/A',
+    country: item?.country || 'N/A',
+    profession: item?.profession || 'N/A',
+    dob: item?.dateOfBirth || 'N/A',
+    education: item?.education || 'N/A',
   }));
 
   const [announce, setAnnounce] = useState(false);
@@ -216,7 +227,7 @@ const UserTable = () => {
           readonly: false,
           toolbarSticky: false,
           height: 500,
-          width: "100%",
+          width: '100%',
         }}
       />
     );
@@ -228,15 +239,15 @@ const UserTable = () => {
       message: { __html: announcementMessage },
     };
     if (!data.title || !data.message) {
-      toast.error("Please enter title and message.");
+      toast.error('Please enter title and message.');
       return;
     }
     const response = await sendAnnouncement(data).unwrap();
     if (response.success) {
-      toast.success("Announcement sent successfully.");
+      toast.success('Announcement sent successfully.');
       setAnnounce(false);
     } else {
-      toast.error("Failed to send announcement.");
+      toast.error('Failed to send announcement.');
     }
   };
 
@@ -255,7 +266,7 @@ const UserTable = () => {
         />
         <Button
           onClick={() => showAnnounceModal()}
-          style={{ marginBottom: 16, fontSize: "20px" }}
+          style={{ marginBottom: 16, fontSize: '20px' }}
         >
           <GrAnnounce />
         </Button>
@@ -298,7 +309,7 @@ const UserTable = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold">
-                  {selectedUser?.name || "N/A"}
+                  {selectedUser?.name || 'N/A'}
                 </h1>
                 <p className="text-sm text-gray-500">
                   "Unlock Your Potential: Discover, Embrace, and Share Your
@@ -315,18 +326,18 @@ const UserTable = () => {
               <div className="flex-1">
                 <h4 className="text-md font-semibold mt-4 mb-2">Personal</h4>
                 <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
-                  <strong>Name:</strong> {selectedUser?.name || "N/A"}
+                  <strong>Name:</strong> {selectedUser?.name || 'N/A'}
                 </p>
                 <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
                   <strong>Profession:</strong>
-                  {selectedUser?.profession || "N/A"}
+                  {selectedUser?.profession || 'N/A'}
                 </p>
                 <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
-                  <strong>Date of Birth:</strong> {selectedUser?.dob || "N/A"}
+                  <strong>Date of Birth:</strong> {selectedUser?.dob || 'N/A'}
                 </p>
                 <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
                   <strong>Education level:</strong>
-                  {selectedUser?.education || "N/A"}
+                  {selectedUser?.education || 'N/A'}
                 </p>
               </div>
 
@@ -335,17 +346,17 @@ const UserTable = () => {
                 <h4 className="text-md font-semibold mt-4 mb-2">Contact</h4>
                 <div>
                   <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
-                    <strong>Email:</strong> {selectedUser?.email || "N/A"}
+                    <strong>Email:</strong> {selectedUser?.email || 'N/A'}
                   </p>
                   <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
                     <strong>Phone Number:</strong>
-                    {selectedUser?.phone || "N/A"}
+                    {selectedUser?.phone || 'N/A'}
                   </p>
                   <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
-                    <strong>Country:</strong> {selectedUser?.country || "N/A"}
+                    <strong>Country:</strong> {selectedUser?.country || 'N/A'}
                   </p>
                   <p className="mb-2 w-full p-2 border-[1px] rounded-lg">
-                    <strong>City:</strong> {selectedUser?.city || "N/A"}
+                    <strong>City:</strong> {selectedUser?.city || 'N/A'}
                   </p>
                 </div>
               </div>
@@ -356,19 +367,19 @@ const UserTable = () => {
                 <button
                   className={`hover:bg-[#f0f8ff] hover:border border-[#00b0f2] hover:text-[#00b0f2] 
         ${
-          selectedUser?.status === "blocked"
-            ? "bg-[#00b0f2] text-white"
-            : "bg-[#00b0f2] text-white"
+          selectedUser?.status === 'blocked'
+            ? 'bg-[#00b0f2] text-white'
+            : 'bg-[#00b0f2] text-white'
         } 
         px-4 py-2 rounded-md`}
                   onClick={() => handleBlockUser(selectedUser)}
                 >
                   {isUpdating ? (
                     <Spin size="small" />
-                  ) : selectedUser?.status === "blocked" ? (
-                    "Unblock"
+                  ) : selectedUser?.status === 'blocked' ? (
+                    'Unblock'
                   ) : (
-                    "Block"
+                    'Block'
                   )}
                 </button>
               </div>
@@ -410,7 +421,7 @@ const UserTable = () => {
         <div className="flex justify-end gap-4">
           <Button onClick={handleCloseAnnounceModal}>Cancel</Button>
           <Button type="primary" onClick={handleSend}>
-            {isSending ? "Sending..." : "Send"}
+            {isSending ? 'Sending...' : 'Send'}
           </Button>
         </div>
       </Modal>

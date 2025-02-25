@@ -1,5 +1,6 @@
-export const url = `http://209.97.150.2:5000`;
-// export const url = `http://209.97.150.2:5000`;
+import deffImage from '../assets/def.png';
+export const url = import.meta.env.VITE_PUBLIC_API_URL;
+
 export const imageUrl = (image) => {
   return image
     ? image?.startsWith(`http`)
@@ -7,5 +8,5 @@ export const imageUrl = (image) => {
       : image?.startsWith('/')
       ? `${url}${image}`
       : `${url}/${image}`
-    : `https://placehold.co/400`;
+    : deffImage;
 };

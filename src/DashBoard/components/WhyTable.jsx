@@ -1,17 +1,18 @@
-import { useState } from "react";
-import { Table, Input, Modal } from "antd";
-import { MdMessage } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
-import ResultOfWhyUser from "./ResultOfWhyUser";
-import { useGetAllWhyQuery } from "../../redux/services/whyApis";
-import { imageUrl } from "../../utils/server";
+import { useState } from 'react';
+import { Table, Input, Modal } from 'antd';
+import { MdMessage } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+import { FaEye } from 'react-icons/fa';
+import ResultOfWhyUser from './ResultOfWhyUser';
+import { useGetAllWhyQuery } from '../../redux/services/whyApis';
+import { imageUrl } from '../../utils/server';
 
 const WhyTable = () => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const { data, isLoading } = useGetAllWhyQuery();
+  const { data, isLoading } = useGetAllWhyQuery({ searchTerm: searchText });
 
   const handleSearch = (e) => {
     setSearchText(e.target.value.toLowerCase());
@@ -29,18 +30,18 @@ const WhyTable = () => {
 
   const columns = [
     {
-      title: "SL No",
+      title: 'SL No',
       width: 50,
-      dataIndex: "slNo",
-      key: "slNo",
-      fixed: "left",
+      dataIndex: 'slNo',
+      key: 'slNo',
+      fixed: 'left',
     },
     {
-      title: "User Info",
+      title: 'User Info',
       width: 150,
-      dataIndex: "userInfo",
-      key: "userInfo",
-      fixed: "left",
+      dataIndex: 'userInfo',
+      key: 'userInfo',
+      fixed: 'left',
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <img
@@ -53,21 +54,21 @@ const WhyTable = () => {
       ),
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
       width: 100,
     },
     {
-      title: "Phone",
-      dataIndex: "phone",
-      key: "phone",
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
       width: 100,
     },
     {
-      title: "Action",
-      key: "operation",
-      fixed: "right",
+      title: 'Action',
+      key: 'operation',
+      fixed: 'right',
       width: 50,
       render: (_, record) => (
         <div className="flex items-center gap-2">

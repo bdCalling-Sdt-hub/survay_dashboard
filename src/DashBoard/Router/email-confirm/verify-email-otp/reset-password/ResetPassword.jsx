@@ -1,8 +1,9 @@
-import { Form, Input, Button, message, Spin } from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useResetPasswordMutation } from "../../../../../redux/services/authApis";
+import { Form, Input, Button, message, Spin } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useResetPasswordMutation } from '../../../../../redux/services/authApis';
+import toast from 'react-hot-toast';
 
 const ResetPassword = () => {
   const [form] = Form.useForm();
@@ -11,14 +12,14 @@ const ResetPassword = () => {
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const onFinish = async ({ confirmPassword, newPassword }) => {
-    const email = localStorage.getItem("email");
+    const email = localStorage.getItem('email');
     if (!email) {
-      setError("No email found. Please start the reset process again.");
+      setError('No email found. Please start the reset process again.');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
@@ -31,14 +32,14 @@ const ResetPassword = () => {
     try {
       const response = await resetPassword(resetData).unwrap();
       if (response.success) {
-        message.success("Password reset successfully.");
-        navigate("/auth/login");
+        toast.success('Password reset successfully.');
+        navigate('/');
       } else {
-        message.error(response.message);
-        setError(response.message || "Failed to reset password.");
+        toast.error(response.message);
+        setError(response.message || 'Failed to reset password.');
       }
     } catch (err) {
-      setError("An error occurred. Please try again later.");
+      setError('An error occurred. Please try again later.');
     }
   };
 
@@ -64,8 +65,8 @@ const ResetPassword = () => {
             name="newPassword"
             label="New Password"
             rules={[
-              { required: true, message: "Please enter your new password!" },
-              { min: 6, message: "Password must be at least 6 characters!" },
+              { required: true, message: 'Please enter your new password!' },
+              { min: 6, message: 'Password must be at least 6 characters!' },
             ]}
           >
             <Input.Password
@@ -80,16 +81,16 @@ const ResetPassword = () => {
           <Form.Item
             name="confirmPassword"
             label="Confirm Password"
-            dependencies={["newPassword"]}
+            dependencies={['newPassword']}
             rules={[
-              { required: true, message: "Please confirm your password!" },
+              { required: true, message: 'Please confirm your password!' },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue("newPassword") === value) {
+                  if (!value || getFieldValue('newPassword') === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error("The two passwords do not match!")
+                    new Error('The two passwords do not match!')
                   );
                 },
               }),
@@ -109,7 +110,7 @@ const ResetPassword = () => {
               htmlType="submit"
               className="w-full h-12 bg-[#00b0f2] hover:bg-[#00b0f2]/70 text-white text-lg font-bold"
             >
-              {isLoading ? <Spin size="small"></Spin> : "Reset Password"}
+              {isLoading ? <Spin size="small"></Spin> : 'Reset Password'}
             </Button>
           </Form.Item>
         </Form>

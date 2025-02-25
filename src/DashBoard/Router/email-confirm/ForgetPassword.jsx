@@ -1,9 +1,10 @@
-import { Form, Input, Button, message } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useForgetEmailPostMutation } from "../../../redux/services/authApis";
+import { Form, Input, Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useForgetEmailPostMutation } from '../../../redux/services/authApis';
+import toast from 'react-hot-toast';
 const ForgetPassword = () => {
-  const [forgotPassword, { isLoading }] = useForgetEmailPostMutation();
+  const [forgotPassword] = useForgetEmailPostMutation();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -16,24 +17,24 @@ const ForgetPassword = () => {
       const response = await forgotPassword(emailData).unwrap();
 
       if (response?.success) {
-        message.success("Check your email for the OTP.");
-        localStorage.setItem("email", email);
-        navigate("/auth/login/email-confirm/verify-email-otp");
+        toast.success('Check your email for the OTP.');
+        localStorage.setItem('email', email);
+        navigate('/auth/login/email-confirm/verify-email-otp');
       } else {
         const errorMessage =
-          response?.message || "An unexpected error occurred.";
+          response?.message || 'An unexpected error occurred.';
         setError(errorMessage);
-        message.error(errorMessage);
+        toast.error(errorMessage);
       }
     } catch (err) {
-      console.error("Request failed:", err);
+      console.error('Request failed:', err);
       const errorMessage =
         err?.response?.data?.message ||
         err?.message ||
-        "Something went wrong. Please try again later.";
+        'Something went wrong. Please try again later.';
 
       setError(errorMessage);
-      message.error(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -59,8 +60,8 @@ const ForgetPassword = () => {
             name="email"
             label="Email address"
             rules={[
-              { required: true, message: "Please enter your email!" },
-              { type: "email", message: "Please enter a valid email!" },
+              { required: true, message: 'Please enter your email!' },
+              { type: 'email', message: 'Please enter a valid email!' },
             ]}
           >
             <Input

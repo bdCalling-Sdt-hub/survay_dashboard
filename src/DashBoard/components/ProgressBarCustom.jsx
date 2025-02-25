@@ -1,66 +1,64 @@
-import{ useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Flex, Progress } from 'antd';
 
-function ProgressBarCustom() {
-    const [progressValues, setProgressValues] = useState({
-        passionForHelping: 0,
-        goalOriented: 0,
-        timeManagement: 0,
-        creativeExpression: 0,
-    });
+function ProgressBarCustom({ data }) {
+  const processedData = useMemo(() => data || [], [data]);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setProgressValues(prevValues => {
-                const nextValues = {
-                    passionForHelping: Math.min(prevValues.passionForHelping + 1, 70),
-                    goalOriented: Math.min(prevValues.goalOriented + 1, 85),
-                    timeManagement: Math.min(prevValues.timeManagement + 1, 50),
-                    creativeExpression: Math.min(prevValues.creativeExpression + 1, 90),
-                };
+  const [progressValues, setProgressValues] = useState({});
 
-                if (
-                    nextValues.passionForHelping === 70 &&
-                    nextValues.goalOriented === 85 &&
-                    nextValues.timeManagement === 50 &&
-                    nextValues.creativeExpression === 90
-                ) {
-                    clearInterval(interval);
-                }
+  useEffect(() => {
+    // Initialize progress values
+    const initialProgress = processedData.reduce((acc, item) => {
+      acc[item._id] = 0;
+      return acc;
+    }, {});
 
-                return nextValues;
-            });
-        }, 50);
+    setProgressValues(initialProgress);
 
-        return () => clearInterval(interval);
-    }, []);
+    const interval = setInterval(() => {
+      setProgressValues((prevValues) => {
+        let allCompleted = true;
 
-    return (
-        <div className='mr-12'>
-            <Flex vertical gap="small">
-                <p>Passion for Helping Others:</p>
-                <Progress
-                    percent={progressValues.passionForHelping}
-                    strokeColor="#62c6ff"
-                />
-                <p>Goal-Oriented:</p>
-                <Progress
-                    percent={progressValues.goalOriented}
-                    strokeColor="#62c6ff"
-                />
-                <p>Challenges with Time Management:</p>
-                <Progress
-                    percent={progressValues.timeManagement}
-                    strokeColor="#62c6ff"
-                />
-                <p>Creative Expression:</p>
-                <Progress
-                    percent={progressValues.creativeExpression}
-                    strokeColor="#62c6ff"
-                />
-            </Flex>
-        </div>
-    );
+        const nextValues = Object.keys(prevValues).reduce((acc, key) => {
+          const targetValue =
+            processedData.find((item) => item._id === key)?.percentage || 0;
+          if (prevValues[key] < targetValue) {
+            acc[key] = Math.min(prevValues[key] + 1, targetValue);
+            allCompleted = false;
+          } else {
+            acc[key] = prevValues[key];
+          }
+          return acc;
+        }, {});
+
+        if (allCompleted) {
+          clearInterval(interval);
+        }
+
+        return nextValues;
+      });
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, [processedData]);
+
+  return (
+    <div className="mr-12 my-12">
+      <Flex vertical gap="small">
+        {processedData.map((item) => (
+          <div key={item._id}>
+            <p>
+              {item.label}: {progressValues[item._id] || 0}%
+            </p>
+            <Progress
+              percent={progressValues[item._id] || 0}
+              strokeColor="#62c6ff"
+            />
+          </div>
+        ))}
+      </Flex>
+    </div>
+  );
 }
 
 export default ProgressBarCustom;

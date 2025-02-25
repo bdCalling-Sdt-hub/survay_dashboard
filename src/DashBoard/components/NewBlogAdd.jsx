@@ -1,13 +1,14 @@
-import { useState, useMemo } from "react";
-import { Button, Form, Input, Upload, message, Card } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import JoditEditor from "jodit-react";
-import { usePostNewBlogMutation } from "../../redux/services/blogApis";
+import { useState, useMemo } from 'react';
+import { Button, Form, Input, Upload, message, Card } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import JoditEditor from 'jodit-react';
+import { usePostNewBlogMutation } from '../../redux/services/blogApis';
+import toast from 'react-hot-toast';
 
 function NewBlogAdd({ setShowEditBlogModal }) {
   const [newBlogPost, { isLoading }] = usePostNewBlogMutation();
   const [form] = Form.useForm();
-  const [blogText, setBlogText] = useState("");
+  const [blogText, setBlogText] = useState('');
   const [blogImage, setBlogImage] = useState(null);
 
   const handleImageUpload = ({ file }) => {
@@ -18,24 +19,27 @@ function NewBlogAdd({ setShowEditBlogModal }) {
     try {
       const values = await form.validateFields();
 
-      if (!values.hashtag.startsWith("#")) {
-        message.error("Hashtag must start with #");
+      if (!values.hashtag.startsWith('#')) {
+        toast.error('Hashtag must start with #');
         return;
       }
-
+      if (blogText === '') {
+        toast.error('Blog content cannot be empty.');
+        return;
+      }
       const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("hashtag", values.hashtag);
-      formData.append("description", blogText);
+      formData.append('title', values.title);
+      formData.append('hashtag', values.hashtag);
+      formData.append('description', blogText);
       if (blogImage) {
-        formData.append("blog_image", blogImage);
+        formData.append('blog_image', blogImage);
       }
 
       await newBlogPost(formData);
-      message.success("Blog added successfully!");
+      toast.success('Blog added successfully!');
       setShowEditBlogModal(false);
     } catch (error) {
-      message.error("Please fill out all fields correctly.");
+      toast.error('Please fill out all fields correctly.');
     }
   };
 
@@ -56,7 +60,7 @@ function NewBlogAdd({ setShowEditBlogModal }) {
         <Form.Item
           label="Blog Title"
           name="title"
-          rules={[{ required: true, message: "Please enter the blog title" }]}
+          rules={[{ required: true, message: 'Please enter the blog title' }]}
         >
           <Input placeholder="Enter blog title" />
         </Form.Item>
@@ -64,7 +68,7 @@ function NewBlogAdd({ setShowEditBlogModal }) {
         <Form.Item
           label="Blog Hashtag"
           name="hashtag"
-          rules={[{ required: true, message: "Please enter a hashtag" }]}
+          rules={[{ required: true, message: 'Please enter a hashtag' }]}
         >
           <Input placeholder="Enter blog hashtag (e.g., #example)" />
         </Form.Item>
@@ -86,9 +90,7 @@ function NewBlogAdd({ setShowEditBlogModal }) {
           )}
         </Form.Item>
 
-        <div className="w-full">
-          {contentEditor}
-        </div>
+        <div className="w-full">{contentEditor}</div>
 
         <Form.Item className="mt-4">
           <Button

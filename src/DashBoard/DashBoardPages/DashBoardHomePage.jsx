@@ -1,26 +1,26 @@
-import GrowthChart from "../components/chart/GrowthChart";
-import { Button, Spin } from "antd";
-import { Link } from "react-router-dom";
-import storyIcon from "../../assets/storyIcon.svg";
-import userIcon from "../../assets/userIcon.svg";
-import blogIcon from "../../assets/blogIcon.svg";
-import whyIcon from "../../assets/why.svg";
-import ShortDonation from "../components/ShortDonation";
-import { useGetNormalUserQuery } from "../../redux/services/userApis";
+import GrowthChart from '../components/chart/GrowthChart';
+import { Button, Spin } from 'antd';
+import { Link } from 'react-router-dom';
+import storyIcon from '../../assets/storyIcon.svg';
+import userIcon from '../../assets/userIcon.svg';
+import blogIcon from '../../assets/blogIcon.svg';
+import whyIcon from '../../assets/why.svg';
+// import ShortDonation from '../components/ShortDonation';
+import { useGetNormalUserQuery } from '../../redux/services/userApis';
 import {
   useGetAllMetaDataQuery,
-  useGetOverViewsQuery,
-} from "../../redux/services/metaApis";
-import UserTable from "../components/UserTable";
+  // useGetOverViewsQuery,
+} from '../../redux/services/metaApis';
+import UserTable from '../components/UserTable';
 
 function DashBoardHomePage() {
   const { data: userData, isLoading } = useGetNormalUserQuery({});
-  const { data: overViewData, isLoading: overViewDataLoading } =
-    useGetOverViewsQuery({ year: "2025" });
+  // const { data: overViewData, isLoading: overViewDataLoading } =
+  //   useGetOverViewsQuery({ year: '2025' });
   const { data: metaData, isLoading: isMetaDataLoading } =
     useGetAllMetaDataQuery();
 
-  if (overViewDataLoading || isMetaDataLoading) {
+  if (isMetaDataLoading) {
     return (
       <div className="flex items-center justify-center w-full h-full">
         <Spin size="small" />
@@ -33,22 +33,22 @@ function DashBoardHomePage() {
 
   const data = [
     {
-      title: "Total Users",
+      title: 'Total Users',
       icon: userIcon,
       number: totalUser,
     },
     {
-      title: "Total Blogs",
+      title: 'Total Blogs',
       icon: blogIcon,
       number: totalBlog,
     },
     {
-      title: "Total Clients Story",
+      title: 'Total Clients Story',
       icon: storyIcon,
       number: totalStory,
     },
     {
-      title: "Total WHY Finds",
+      title: 'Total WHY Finds',
       icon: whyIcon,
       number: totalWhy,
     },
@@ -78,7 +78,7 @@ function DashBoardHomePage() {
       <GrowthChart userData={userData} isLoading={isLoading}></GrowthChart>
       <div className="flex items-center justify-between w-full p-2 rounded-md bg-[#d6f4ff]">
         <h1 className="mt-2">Recent User</h1>
-        <Link to={"/dashboard/donation-manage"}>
+        <Link to={'/dashboard/user-manage'}>
           <Button className="bg-[#003366]  hover:bg-[#003366]/70 text-white">
             See All User
           </Button>

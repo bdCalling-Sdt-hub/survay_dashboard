@@ -1,14 +1,14 @@
-import { Form, Input, Button, Spin } from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { usePostLoginInfoMutation } from "../../../redux/services/authApis";
-import { jwtDecode } from "jwt-decode";
+import { Form, Input, Button, Spin } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { usePostLoginInfoMutation } from '../../../redux/services/authApis';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
   const [login, { isLoading }] = usePostLoginInfoMutation();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const onFinish = async (values) => {
     const data = {
@@ -16,29 +16,29 @@ const Login = () => {
       password: values.password,
     };
 
-    setError("");
+    setError('');
     try {
       const response = await login(data).unwrap();
-      localStorage.removeItem("accessToken");
+      localStorage.removeItem('accessToken');
       if (response.success) {
         const token = response?.data?.accessToken;
-        localStorage.setItem("accessToken", token);
+        localStorage.setItem('accessToken', token);
         try {
           const decoded = jwtDecode(token);
-          if (decoded.role === "superAdmin") {
-            navigate("/");
+          if (decoded.role === 'superAdmin') {
+            navigate('/');
           } else {
-            localStorage.removeItem("accessToken");
-            navigate("/auth/login");
+            localStorage.removeItem('accessToken');
+            navigate('/auth/login');
           }
         } catch (decodeError) {
-          setError("Failed to process login. Invalid token.");
+          setError('Failed to process login. Invalid token.');
         }
       } else {
-        setError(response.message || "Login failed. Please try again.");
+        setError(response.message || 'Login failed. Please try again.');
       }
     } catch (err) {
-      setError(err?.data?.message || "An error occurred. Please try again.");
+      setError(err?.data?.message || 'An error occurred. Please try again.');
     }
   };
 
@@ -64,8 +64,8 @@ const Login = () => {
             name="email"
             label="Email address"
             rules={[
-              { required: true, message: "Please enter your email!" },
-              { type: "email", message: "Please enter a valid email!" },
+              { required: true, message: 'Please enter your email!' },
+              { type: 'email', message: 'Please enter a valid email!' },
             ]}
           >
             <Input
@@ -77,7 +77,7 @@ const Login = () => {
           <Form.Item
             name="password"
             label="Password"
-            rules={[{ required: true, message: "Please enter your password!" }]}
+            rules={[{ required: true, message: 'Please enter your password!' }]}
           >
             <Input.Password
               placeholder="Enter your password"
@@ -103,19 +103,10 @@ const Login = () => {
               className="w-full h-12 bg-[#00b0f2] hover:bg-[#00b0f2]/70 text-white text-lg font-bold"
               disabled={isLoading}
             >
-              {isLoading ? <Spin size="small" /> : "Sign In"}
+              {isLoading ? <Spin size="small" /> : 'Sign In'}
             </Button>
           </Form.Item>
         </Form>
-        <h1 className="text-black mt-6">
-          Don’t have an account?
-          <Link
-            to="/auth/register"
-            className="text-[#00B0F2] underline text-sm md:text-base ml-2"
-          >
-            Go to Sign up
-          </Link>
-        </h1>
       </div>
     </div>
   );

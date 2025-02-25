@@ -1,5 +1,6 @@
-import { Button, Form, message, Spin } from "antd";
+import { Button, Form, Spin } from "antd";
 import { useSuperAdminProfileUpdateMutation } from "../../redux/services/userApis";
+import toast from "react-hot-toast";
 
 const ProfileEdit = ({ image, data }) => {
   const [form] = Form.useForm();
@@ -28,7 +29,7 @@ const ProfileEdit = ({ image, data }) => {
       const res = await setProfileUpdate(formData);
 
       if (res?.data?.success) {
-        message.success("Profile updated successfully!");
+        toast.success("Profile updated successfully!");
 
         // Update the form with new values after the successful update
         form.setFieldsValue({
@@ -36,11 +37,11 @@ const ProfileEdit = ({ image, data }) => {
           address: updateData.address,
         });
       } else {
-        message.error(res?.message || "Failed to update profile.");
+        toast.error(res?.message || "Failed to update profile.");
       }
     } catch (error) {
       console.error("Failed to update profile:", error);
-      message.error("An error occurred while updating the profile.");
+      toast.error("An error occurred while updating the profile.");
     }
   };
 
