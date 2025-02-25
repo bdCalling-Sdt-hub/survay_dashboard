@@ -45,7 +45,7 @@ const GrowthChart = () => {
     };
 
     if (!isLoading && data?.data) {
-      data.data.forEach(({ month, totalUser }) => {
+      data?.data.forEach(({ month, totalUser }) => {
         if (month in monthMap) {
           monthMap[month] = totalUser;
         }

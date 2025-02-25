@@ -61,15 +61,15 @@ function DashBoardHomePage() {
   return (
     <div className="flex  flex-col justify-center gap-12">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-        {data.map((card, idx) => (
+        {data?.map((card, idx) => (
           <div
             key={idx}
             className="flex flex-1 text-center  flex-col p-12  rounded-md shadow-md bg-[#f0f8ff] items-center gap-4  h-48"
           >
-            <h1>{card.title}</h1>
-            <img src={card.icon} alt={card.title} />
+            <h1>{card?.title}</h1>
+            <img src={card?.icon} alt={card.title} />
             <p>
-              <strong>{card.number}</strong>
+              <strong>{card?.number}</strong>
             </p>
           </div>
         ))}
