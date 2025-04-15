@@ -118,13 +118,13 @@ const UserTable = () => {
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <img
-            src={imageUrl(record.profileImage)}
+            src={imageUrl(record?.profileImage)}
             alt="User"
             className="w-10 h-10 object-cover rounded-full"
           />
           <div className="flex flex-col">
-            <span>{record.name}</span>
-            <span>{record.email}</span>
+            <span>{record?.name}</span>
+            <span>{record?.email}</span>
           </div>
         </div>
       ),
@@ -181,7 +181,7 @@ const UserTable = () => {
             className="text-white w-8 p-2 cursor-pointer hover:opacity-75 h-8 rounded-md bg-red-600"
           />
           <Link
-            to={`https://mail.google.com/mail/?view=cm&fs=1&to=${record.email}`}
+            to={`https://mail.google.com/mail/?view=cm&fs=1&to=${record?.email}`}
             target="_blank"
             rel="noopener noreferrer"
           >
