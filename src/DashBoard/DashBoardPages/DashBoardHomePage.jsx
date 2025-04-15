@@ -5,18 +5,14 @@ import storyIcon from '../../assets/storyIcon.svg';
 import userIcon from '../../assets/userIcon.svg';
 import blogIcon from '../../assets/blogIcon.svg';
 import whyIcon from '../../assets/why.svg';
-// import ShortDonation from '../components/ShortDonation';
 import { useGetNormalUserQuery } from '../../redux/services/userApis';
 import {
   useGetAllMetaDataQuery,
-  // useGetOverViewsQuery,
 } from '../../redux/services/metaApis';
 import UserTable from '../components/UserTable';
 
 function DashBoardHomePage() {
   const { data: userData, isLoading } = useGetNormalUserQuery({});
-  // const { data: overViewData, isLoading: overViewDataLoading } =
-  //   useGetOverViewsQuery({ year: '2025' });
   const { data: metaData, isLoading: isMetaDataLoading } =
     useGetAllMetaDataQuery();
 
@@ -27,7 +23,6 @@ function DashBoardHomePage() {
       </div>
     );
   }
-  // console.log(overViewData);
 
   const { totalUser, totalStory, totalWhy, totalBlog } = metaData.data;
 
@@ -35,22 +30,22 @@ function DashBoardHomePage() {
     {
       title: 'Total Users',
       icon: userIcon,
-      number: metaData?.data?.totalUser,
+      number: totalUser,
     },
     {
       title: 'Total Blogs',
       icon: blogIcon,
-      number: metaData?.data?.totalBlog,
+      number: totalBlog,
     },
     {
       title: 'Total Clients Story',
       icon: storyIcon,
-      number: metaData?.data?.totalStory,
+      number: totalStory,
     },
     {
       title: 'Total WHY Finds',
       icon: whyIcon,
-      number: metaData?.data?.totalWhy,
+      number: totalWhy,
     },
     // {
     //   title: "Total Earning",
@@ -64,12 +59,12 @@ function DashBoardHomePage() {
         {data?.map((card, idx) => (
           <div
             key={idx}
-            className="flex flex-1 text-center  flex-col p-12  rounded-md shadow-md bg-[#f0f8ff] items-center gap-4  h-48"
+            className="flex flex-1 text-center  flex-col p-12  rounded-md shadow-md bg-[#f0f8ff] items-center gap-4"
           >
-            <h1>{card?.title}</h1>
+            <h1 className='text-xl font-semibold capitalize'>{card?.title}</h1>
             <img src={card?.icon} alt={card.title} />
             <p>
-              <strong>{card?.number}</strong>
+              <strong className='text-2xl'>{card?.number}</strong>
             </p>
           </div>
         ))}

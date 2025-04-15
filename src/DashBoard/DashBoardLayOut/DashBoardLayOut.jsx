@@ -143,7 +143,7 @@ function DashBoardLayOut() {
           <img src={brandLogo} alt="logo" />
         </div>
         <Menu
-          style={{ background: "#e6f3fe", fontSize: "16px" }}
+          style={{ background: "#e6f3fe", fontSize: "18px" }}
           mode="inline"
           onClick={handleMenuClick}
           selectedKeys={[

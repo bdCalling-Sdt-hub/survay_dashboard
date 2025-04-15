@@ -218,6 +218,7 @@ const StoryTable = () => {
       {/* Table */}
       <Table
         columns={columns}
+        scroll={{ x: 'max-content' }}
         dataSource={dataSource}
         loading={isLoading}
         pagination={{

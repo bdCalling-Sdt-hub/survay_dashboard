@@ -31,17 +31,15 @@ const WhyTable = () => {
   const columns = [
     {
       title: 'SL No',
-      width: 50,
       dataIndex: 'slNo',
       key: 'slNo',
-      fixed: 'left',
     },
     {
       title: 'User Info',
-      width: 150,
+
       dataIndex: 'userInfo',
       key: 'userInfo',
-      fixed: 'left',
+
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <img
@@ -57,19 +55,16 @@ const WhyTable = () => {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      width: 100,
     },
     {
       title: 'Phone',
       dataIndex: 'phone',
       key: 'phone',
-      width: 100,
     },
     {
       title: 'Action',
       key: 'operation',
-      fixed: 'right',
-      width: 50,
+
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <FaEye
@@ -114,6 +109,7 @@ const WhyTable = () => {
         style={{ marginBottom: 16 }}
       />
       <Table
+        scroll={{ x: 'max-content' }}
         loading={isLoading}
         columns={columns}
         dataSource={dataSource}
@@ -121,9 +117,6 @@ const WhyTable = () => {
           showSizeChanger: false,
           pageSize: 8,
         }}
-        // scroll={{
-        //   x: 1500,
-        // }}
       />
       <Modal
         title={null}

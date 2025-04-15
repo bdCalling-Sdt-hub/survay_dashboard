@@ -61,7 +61,8 @@ const UserTable = () => {
     try {
       const result = await Swal.fire({
         title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        text:
+          'You want to ' + (isBlocked ? 'unblock' : 'block') + ' this user!',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -107,14 +108,13 @@ const UserTable = () => {
       width: 100,
       dataIndex: 'slNo',
       key: 'slNo',
-      fixed: 'left',
     },
     {
       title: 'User Info',
       width: 200,
       dataIndex: 'userInfo',
       key: 'userInfo',
-      fixed: 'left',
+
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <img
@@ -133,19 +133,17 @@ const UserTable = () => {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      width: 150,
     },
     {
       title: 'Address',
       dataIndex: 'address',
       key: 'address',
-      width: 150,
     },
     {
       title: 'Signup Date',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      width: 150,
+
       sorter: (a, b) => new Date(a.completionDate) - new Date(b.completionDate),
       sortOrder:
         sortedInfo.columnKey === 'completionDate' ? sortedInfo.order : null,
@@ -154,7 +152,7 @@ const UserTable = () => {
       title: 'User Status',
       dataIndex: 'status',
       key: 'status',
-      width: 150,
+
       render: (status) => (
         <span>
           {status === 'in-progress' ? (
@@ -172,8 +170,6 @@ const UserTable = () => {
     {
       title: 'Action',
       key: 'operation',
-      fixed: 'right',
-      width: 150,
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <FaUser
@@ -275,9 +271,7 @@ const UserTable = () => {
         loading={isLoading}
         columns={columns}
         dataSource={dataSource}
-        scroll={{
-          x: columns?.length * 150,
-        }}
+        scroll={{ x: 'max-content' }}
         pagination={{
           pageSize: data?.data?.meta?.limit || 10,
           total: data?.data?.meta?.total || 0,
