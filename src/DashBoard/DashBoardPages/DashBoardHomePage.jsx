@@ -6,9 +6,7 @@ import userIcon from '../../assets/userIcon.svg';
 import blogIcon from '../../assets/blogIcon.svg';
 import whyIcon from '../../assets/why.svg';
 import { useGetNormalUserQuery } from '../../redux/services/userApis';
-import {
-  useGetAllMetaDataQuery,
-} from '../../redux/services/metaApis';
+import { useGetAllMetaDataQuery } from '../../redux/services/metaApis';
 import UserTable from '../components/UserTable';
 
 function DashBoardHomePage() {
@@ -24,28 +22,26 @@ function DashBoardHomePage() {
     );
   }
 
-  const { totalUser, totalStory, totalWhy, totalBlog } = metaData.data;
-
   const data = [
     {
       title: 'Total Users',
       icon: userIcon,
-      number: totalUser,
+      number: metaData?.data?.totalUser,
     },
     {
       title: 'Total Blogs',
       icon: blogIcon,
-      number: totalBlog,
+      number: metaData?.data?.totalBlog,
     },
     {
       title: 'Total Clients Story',
       icon: storyIcon,
-      number: totalStory,
+      number: metaData?.data?.totalStory,
     },
     {
       title: 'Total WHY Finds',
       icon: whyIcon,
-      number: totalWhy,
+      number: metaData?.data?.totalWhy,
     },
     // {
     //   title: "Total Earning",
@@ -61,10 +57,10 @@ function DashBoardHomePage() {
             key={idx}
             className="flex flex-1 text-center  flex-col p-12  rounded-md shadow-md bg-[#f0f8ff] items-center gap-4"
           >
-            <h1 className='text-xl font-semibold capitalize'>{card?.title}</h1>
-            <img src={card?.icon} alt={card.title} />
+            <h1 className="text-xl font-semibold capitalize">{card?.title}</h1>
+            <img src={card?.icon} alt={card?.title} />
             <p>
-              <strong className='text-2xl'>{card?.number}</strong>
+              <strong className="text-2xl">{card?.number}</strong>
             </p>
           </div>
         ))}
